@@ -18,5 +18,19 @@
     <description>Spring公共配置</description>
  	<context:component-scan base-package="pinguo.rocket.*"/>
     <!-- 开启定时任务 -->
-    <task:annotation-driven/>  
+    <task:annotation-driven/>
+    
+    <!-- applicationUtil工具类 -->
+	<bean id="ApplicationContextUtil" class="pinguo.rocket.mq.comm.ApplicationContextUtil"></bean>
+	
+	<!-- bean初始化配置 -->
+	<bean class="pinguo.rocket.mq.init.Rocketmq" scope="singleton">
+	</bean>
+	
+    <!-- 初始化消费者producer -->
+	<bean id="PinGuoProducer" class="com.alibaba.rocketmq.client.producer.DefaultMQProducer" scope="singleton">
+		<property name="producerGroup" value="PgProducerGroup"></property>
+		<property name="namesrvAddr" value="10.1.2.236:9876"></property>
+	</bean>
+	  
 </beans>
