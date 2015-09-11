@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rocket>
+	<consumer name="cc_album">
+		<topic name="cc">
+			<tag name="album.delete">
+				<strategy>
+					<url>http://www.camera360.com/delete</url>
+					<timeout>30</timeout>
+					<retryTimes>3</retryTimes>
+				</strategy>
+			</tag>
+			<tag name="comment.doComent">
+				<strategy>
+					<url>http://www.camera360.com/doComent</url>
+					<timeout>50</timeout>
+					<retryTimes>3</retryTimes>
+				</strategy>
+			</tag>
+		</topic>
+		<topic name="cloud">
+			<tag name="water">
+				<strategy>
+					<url>http://www.camera360.com/delete</url>
+					<timeout>30</timeout>
+					<retryTimes>3</retryTimes>
+				</strategy>
+			</tag>
+			<tag name="userLogin">
+				<strategy>
+					<url>http://www.camera360.com/doComent</url>
+					<timeout>50</timeout>
+					<retryTimes>3</retryTimes>
+				</strategy>
+			</tag>
+		</topic>
+	</consumer>
+	<consumer name="cc_user">
+		<topic name="cc">
+			<tag name="album.delete">
+				<strategy>
+					<url>http://www.camera360.com/delete</url>
+					<timeout>30</timeout>
+					<retryTimes>3</retryTimes>
+				</strategy>
+			</tag>
+			<tag name="comment.doComent">
+				<strategy>
+					<url>http://www.camera360.com/doComent</url>
+					<timeout>50</timeout>
+					<retryTimes>3</retryTimes>
+				</strategy>
+			</tag>
+		</topic>
+		<topic name="cloud">
+			<tag name="water">
+				<strategy>
+					<url>http://www.camera360.com/delete</url>
+					<timeout>30</timeout>
+					<retryTimes>3</retryTimes>
+				</strategy>
+			</tag>
+			<tag name="userLogin">
+				<strategy>
+					<url>http://www.camera360.com/doComent</url>
+					<timeout>50</timeout>
+					<retryTimes>3</retryTimes>
+				</strategy>
+			</tag>
+		</topic>
+	</consumer>
+</rocket>
