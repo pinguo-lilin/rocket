@@ -1,66 +1,54 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rocket>
-	<consumer name="cc_album" persistConsumerOffsetInterval="5000">
+	<consumer name="cc_album" persistConsumerOffsetInterval="5009">
 		<topic name="cc">
-			<tag name="album.delete" >
-				<url>http://www.camera360.com/delete</url>
+			<tag name="comment.addLike" >
+				<url>/album/inner/mq/MqComment</url>
 				<timeOut>30</timeOut>
-				<retryTimes>3</retryTimes>
+				<retryTimes>2</retryTimes>
 			</tag>
-			<tag name="comment.doComent">
-				<url>http://www.camera360.com/doComent</url>
+			<tag name="comment.addComm">
+				<url>/album/inner/mq/MqComment</url>
 				<timeOut>50</timeOut>
 				<retryTimes>3</retryTimes>
 			</tag>
 		</topic>
-		<topic name="cloud">
+		<topic name="userCenter">
 			<tag name="water">
-				<url>http://www.camera360.com/delete</url>
-				<timeOut>30</timeOut>
-				<retryTimes>3</retryTimes>
+				<url>/user/water</url>
+				<timeOut>46</timeOut>
+				<retryTimes>6</retryTimes>
 			</tag>
 			<tag name="userLogin">
-				<url>http://www.camera360.com/doComent</url>
-				<timeOut>50</timeOut>
-				<retryTimes>3</retryTimes>
-			</tag>
-		</topic>
-		<topic name="msg">
-			<tag name="water">
-				<url>http://www.camera360.com/delete</url>
-				<timeOut>30</timeOut>
-				<retryTimes>3</retryTimes>
-			</tag>
-			<tag name="userLogin">
-				<url>http://www.camera360.com/doComent</url>
-				<timeOut>56</timeOut>
-				<retryTimes>3</retryTimes>
+				<url>/user/userLogin</url>
+				<timeOut>100</timeOut>
+				<retryTimes>1</retryTimes>
 			</tag>
 		</topic>
 	</consumer>
 	<consumer name="cc_user">
 		<topic name="cc">
-			<tag name="album.delete">
-				<url>http://www.camera360.com/delete</url>
+			<tag name="comment.addLike" >
+				<url>/album/inner/mq/MqComment</url>
 				<timeOut>30</timeOut>
-				<retryTimes>3</retryTimes>
+				<retryTimes>2</retryTimes>
 			</tag>
-			<tag name="comment.doComent">
-				<url>http://www.camera360.com/doComent</url>
+			<tag name="comment.addComm">
+				<url>/album/inner/mq/MqComment</url>
 				<timeOut>50</timeOut>
 				<retryTimes>3</retryTimes>
 			</tag>
 		</topic>
-		<topic name="cloud">
+		<topic name="userCenter">
 			<tag name="water">
-				<url>http://www.camera360.com/delete</url>
-				<timeOut>30</timeOut>
-				<retryTimes>3</retryTimes>
+				<url>/user/water</url>
+				<timeOut>46</timeOut>
+				<retryTimes>6</retryTimes>
 			</tag>
 			<tag name="userLogin">
-				<url>http://www.camera360.com/doComent</url>
-				<timeOut>50</timeOut>
-				<retryTimes>3</retryTimes>
+				<url>/user/userLogin</url>
+				<timeOut>100</timeOut>
+				<retryTimes>1</retryTimes>
 			</tag>
 		</topic>
 	</consumer>

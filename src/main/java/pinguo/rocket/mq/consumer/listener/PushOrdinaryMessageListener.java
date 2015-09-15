@@ -13,9 +13,13 @@ import com.alibaba.rocketmq.client.consumer.listener.ConsumeConcurrentlyStatus;
 import com.alibaba.rocketmq.client.consumer.listener.MessageListenerConcurrently;
 import com.alibaba.rocketmq.common.message.MessageExt;
 
-import pinguo.rocket.mq.comm.HttpHelper;
 import pinguo.rocket.mq.entity.Strategy;
 
+/**
+ * 
+ * PushConsumer顺序消息监听器
+ *
+ */
 public class PushOrdinaryMessageListener implements MessageListenerConcurrently{
 	private Map<String, Map<String, Strategy>> topicTagStrategys = new HashMap<String, Map<String, Strategy>>();
 	
@@ -24,11 +28,14 @@ public class PushOrdinaryMessageListener implements MessageListenerConcurrently{
 	}
 	@Override
 	public ConsumeConcurrentlyStatus consumeMessage(List<MessageExt> msgs, ConsumeConcurrentlyContext context) {
+		// 消息属性
 		MessageExt msgExt = msgs.get(0);
 		String topic = msgExt.getTopic();
 		String tag = msgExt.getTags();
 		byte[] msg = msgExt.getBody();
 		String info = new String(msg);
+		
+		// 转发策略信息
 		Strategy strategy = this.topicTagStrategys.get(topic).get(tag);
 		String url = strategy.getUrl();
 		int timeOut = strategy.getTimeOut();
@@ -37,14 +44,12 @@ public class PushOrdinaryMessageListener implements MessageListenerConcurrently{
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
 		params.add(new BasicNameValuePair("info", info));
 
-		for (int i = 0; i < retryTimes; i++) {
-			try {
-				String jsonStr = HttpHelper.post(url, params, timeOut);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
+		// 转发消息
+		System.out.println("msg="+info);
+		System.out.println("url="+url);
+		System.out.println("timeOut="+timeOut);
+		System.out.println("retryTimes"+retryTimes);
+		
 		return ConsumeConcurrentlyStatus.CONSUME_SUCCESS;
 	}
-
 }

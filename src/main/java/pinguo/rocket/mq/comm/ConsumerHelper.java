@@ -1,7 +1,6 @@
 package pinguo.rocket.mq.comm;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 
 public class ConsumerHelper {
 
@@ -13,30 +12,33 @@ public class ConsumerHelper {
 	 * @return
 	 */
 	public static Object objectPropertiesToOtherOne(Object object, Object otherObject){
-		Class<? extends Object> clazzOne = object.getClass();
-		Class<? extends Object> clazzTwo = otherObject.getClass();
-		Field[] fields = clazzOne.getDeclaredFields();
+		Class<? extends Object> clazz = object.getClass();
+		Field[] fields = clazz.getDeclaredFields();
 		
 		for (Field field : fields) {
-			
 			String getMethodName = "get" + UtilHelper.toUpperFirstCase(field.getName());
 			String setMethodName = "set" + UtilHelper.toUpperFirstCase(field.getName());
 			
 			try {
-				Method getMethod = clazzOne.getDeclaredMethod(getMethodName);
-				String getValue = (String) getMethod.invoke(object);
-				
+				Object getValue = ReflectionUtils.invokeMethod(object, getMethodName, new Class<?>[]{}, new Object[]{});
 				if (field.getGenericType().toString().equals("class java.lang.String")) {
-					Method setMethod = clazzTwo.getDeclaredMethod(setMethodName, String.class);
-					setMethod.invoke(object, getValue);
-
+					Class<?>[] parameterTypes = {String.class};
+					Object[] parameters = {getValue.toString()};
+					ReflectionUtils.invokeMethod(otherObject, setMethodName, parameterTypes, parameters);
+					
 				} else if (field.getGenericType().toString().equals("int")) {
-					Method setMethod = clazzTwo.getDeclaredMethod(setMethodName, int.class);
-					setMethod.invoke(object, Integer.parseInt(getValue));
+					Class<?>[] parameterTypes = {int.class};
+					Object[] parameters = {Integer.parseInt(getValue.toString())};
+					ReflectionUtils.invokeMethod(otherObject, setMethodName, parameterTypes, parameters);
+					
+				} else if (field.getGenericType().toString().equals("class java.lang.Boolean")) {
+					Class<?>[] parameterTypes = {boolean.class};
+					Object[] parameters = {Boolean.parseBoolean(getValue.toString())};
+					ReflectionUtils.invokeMethod(otherObject, setMethodName, parameterTypes, parameters);
 				}
-				
 			} catch (Exception exception) {
-				exception.printStackTrace();
+//				exception.printStackTrace();
+				System.out.println(otherObject.toString() + "没有方法，" + setMethodName);
 				continue;
 			}
 		}

@@ -21,43 +21,48 @@ import pinguo.rocket.mq.entity.Subscribe;
  *PushConsumer逻辑
  *
  */
-public class PushConsumer extends ConsumerFactory{
+public class PushConsumer extends AbstractConsumer {
 
 	public PushConsumer(String consumerName) {
 		this.consumerName = consumerName;
 	}
-	
+
 	@Override
-	public void start() throws MQClientException {
+	public void start() {
 		Consumer consumerModel = consumers.get(consumerName);
 		List<Subscribe> subscribeList = subscribes.get(consumerName);
-		
-		//初始化
+
+		// 初始化
 		DefaultMQPushConsumer consumer = new DefaultMQPushConsumer(consumerName);
 		consumer = (DefaultMQPushConsumer) ConsumerHelper.objectPropertiesToOtherOne(consumerModel, consumer);
-		
+
 		consumer.setConsumeFromWhere(ConsumeFromWhere.CONSUME_FROM_FIRST_OFFSET);
 		consumer.setNamesrvAddr(namesrvAddr);
-		
-		//订阅专题
-		for (Subscribe subscribe : subscribeList) {
-			consumer.subscribe(subscribe.getTopic(), subscribe.getTags());
-		}
-		
-		//注册回调监听器
-		Map<String, Map<String, Strategy>> topicTagStrategys = this.strategys.get(consumerName);
-		
-		//顺序消息
-		if(consumerModel.isOrder()){
-			MessageListenerOrderly messageListener = new PushOrderMessageListener(topicTagStrategys);
-			consumer.registerMessageListener(messageListener);
-		//无序消息
-		}else{
-			MessageListenerConcurrently messageListener = new PushOrdinaryMessageListener(topicTagStrategys);
-			consumer.registerMessageListener(messageListener);
-		}
-		
-		consumer.start();
-	}
 
+		System.out.println("persit="+consumer.getPersistConsumerOffsetInterval());
+		System.out.println("namesrvAddr="+consumer.getNamesrvAddr());
+		try {
+			// 订阅专题
+			for (Subscribe subscribe : subscribeList) {
+				consumer.subscribe(subscribe.getTopic(), subscribe.getTags());
+			}
+
+			// 转发策略初始化
+			Map<String, Map<String, Strategy>> topicTagStrategys = this.strategys.get(consumerName);
+
+			// 顺序消息
+			if (consumerModel.getOrder()) {
+				MessageListenerOrderly messageListener = new PushOrderMessageListener(topicTagStrategys);
+				consumer.registerMessageListener(messageListener);
+			// 无序消息
+			} else {
+				MessageListenerConcurrently messageListener = new PushOrdinaryMessageListener(topicTagStrategys);
+				consumer.registerMessageListener(messageListener);
+			}
+			consumer.start();
+		} catch (MQClientException e) {
+			e.printStackTrace();
+			System.out.println("PushConsumer初始化失败，error=" + e.getMessage());
+		}
+	}
 }

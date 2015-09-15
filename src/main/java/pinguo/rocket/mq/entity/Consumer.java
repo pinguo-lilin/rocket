@@ -25,7 +25,7 @@ public class Consumer {
 	public void setPersistConsumerOffsetInterval(int persistConsumerOffsetInterval) {
 		this.persistConsumerOffsetInterval = persistConsumerOffsetInterval;
 	}
-	public boolean isOrder() {
+	public boolean getOrder() {
 		return order;
 	}
 	public void setOrder(boolean order) {
