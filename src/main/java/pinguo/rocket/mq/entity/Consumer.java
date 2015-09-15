@@ -4,6 +4,7 @@ public class Consumer {
 
 	private String name;
 	private String type;
+	private boolean order;
 	private int persistConsumerOffsetInterval;
 	
 	public String getName() {
@@ -23,5 +24,11 @@ public class Consumer {
 	}
 	public void setPersistConsumerOffsetInterval(int persistConsumerOffsetInterval) {
 		this.persistConsumerOffsetInterval = persistConsumerOffsetInterval;
+	}
+	public boolean isOrder() {
+		return order;
+	}
+	public void setOrder(boolean order) {
+		this.order = order;
 	}
 }

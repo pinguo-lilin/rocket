@@ -5,7 +5,7 @@ import java.util.Map;
 
 import org.dom4j.DocumentException;
 
-import pinguo.rocket.mq.comm.ConsumerHelper;
+import pinguo.rocket.mq.comm.ConsumerXmlHelper;
 import pinguo.rocket.mq.entity.Consumer;
 import pinguo.rocket.mq.entity.Strategy;
 import pinguo.rocket.mq.entity.Subscribe;
@@ -16,16 +16,26 @@ public class DispatcherConsumer {
 			return;
 		}
 		String consumerName = args[0];
-		System.out.println(consumerName);
-		
 		String configPath = "src/main/resources/rocket.xml";
-		ConsumerHelper consumerHelper = new ConsumerHelper(configPath);
+		ConsumerXmlHelper consumerHelper = new ConsumerXmlHelper(configPath);
 		consumerHelper.parseXml();
 		Map<String, Consumer> consumers = consumerHelper.getConsumers();
 		Map<String, List<Subscribe>> subscribes = consumerHelper.getSubscribes();
 		Map<String, Map<String, Map<String, Strategy>>> strategys = consumerHelper.getStrategys();
+
+		if (!consumers.containsKey(consumerName) || !subscribes.containsKey(consumerName)) {
+			return;
+		}
 		
-		System.out.println(strategys.get("cc_album").get("msg").get("userLogin").getTimeOut());
+		ConsumerFactory pushConsumer = new PushConsumer(consumerName);
+		pushConsumer.setConsumers(consumers);
+		pushConsumer.setSubscribes(subscribes);
+		pushConsumer.setStrategys(strategys);
 		
+		try {
+			pushConsumer.start();
+		} catch (Exception e) {
+			
+		}
 	}
 }
