@@ -5,7 +5,7 @@ import java.util.Map;
 
 import org.dom4j.DocumentException;
 
-import pinguo.rocket.mq.comm.ConsumerXmlHelper;
+import pinguo.rocket.mq.comm.XmlHelper;
 import pinguo.rocket.mq.entity.Consumer;
 import pinguo.rocket.mq.entity.Strategy;
 import pinguo.rocket.mq.entity.Subscribe;
@@ -20,11 +20,11 @@ public class DispatcherConsumer {
 		String configPath = "src/main/resources/rocket.xml";
 		
 		//解析xml
-		ConsumerXmlHelper consumerHelper = new ConsumerXmlHelper(configPath);
-		consumerHelper.parseXml();
-		Map<String, Consumer> consumers = consumerHelper.getConsumers();
-		Map<String, List<Subscribe>> subscribes = consumerHelper.getSubscribes();
-		Map<String, Map<String, Map<String, Strategy>>> strategys = consumerHelper.getStrategys();
+		XmlHelper xmlHelper = new XmlHelper(configPath);
+		xmlHelper.parseXml();
+		Map<String, Consumer> consumers = xmlHelper.getConsumers();
+		Map<String, List<Subscribe>> subscribes = xmlHelper.getSubscribes();
+		Map<String, Map<String, Map<String, Strategy>>> strategys = xmlHelper.getStrategys();
 
 		//条件过滤
 		if (!consumers.containsKey(consumerName) || !subscribes.containsKey(consumerName)) {

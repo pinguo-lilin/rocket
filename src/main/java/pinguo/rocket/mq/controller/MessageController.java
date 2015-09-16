@@ -38,9 +38,9 @@ public class MessageController {
 		//appName(topic)存在性验证
 		
 		//过期消息处理
-		long ltime = Long.parseLong(time);
+		float ftime = Float.parseFloat(time);
 		
-		Msg msg = new Msg(appName, opcode, info, ltime, key);
+		Msg msg = new Msg(appName, opcode, info, ftime, key);
 		
 		return messageService.send(msg);
 	}

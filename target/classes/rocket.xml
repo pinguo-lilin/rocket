@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rocket>
-	<consumer name="cc_album" persistConsumerOffsetInterval="5009">
+	<consumer name="cc_album" persistConsumerOffsetInterval="5009" pullBatchSize="128">
 		<topic name="cc">
 			<tag name="comment.addLike" >
 				<url>/album/inner/mq/MqComment</url>

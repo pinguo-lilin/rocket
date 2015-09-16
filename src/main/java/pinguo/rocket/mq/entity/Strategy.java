@@ -2,9 +2,16 @@ package pinguo.rocket.mq.entity;
 
 public class Strategy {
 	private String url;
-	private int timeOut;
-	private int retryTimes;
+	private int timeOut = 300;
+	private int retryTimes = 3;
+	private int sendInterval = 100;
 	
+	public int getSendInterval() {
+		return sendInterval;
+	}
+	public void setSendInterval(int sendInterval) {
+		this.sendInterval = sendInterval;
+	}
 	public String getUrl() {
 		return url;
 	}

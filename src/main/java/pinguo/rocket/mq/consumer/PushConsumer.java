@@ -9,7 +9,7 @@ import com.alibaba.rocketmq.client.consumer.listener.MessageListenerOrderly;
 import com.alibaba.rocketmq.client.exception.MQClientException;
 import com.alibaba.rocketmq.common.consumer.ConsumeFromWhere;
 
-import pinguo.rocket.mq.comm.ConsumerHelper;
+import pinguo.rocket.mq.comm.ReflectionUtils;
 import pinguo.rocket.mq.consumer.listener.PushOrderMessageListener;
 import pinguo.rocket.mq.consumer.listener.PushOrdinaryMessageListener;
 import pinguo.rocket.mq.entity.Consumer;
@@ -34,12 +34,13 @@ public class PushConsumer extends AbstractConsumer {
 
 		// 初始化
 		DefaultMQPushConsumer consumer = new DefaultMQPushConsumer(consumerName);
-		consumer = (DefaultMQPushConsumer) ConsumerHelper.objectPropertiesToOtherOne(consumerModel, consumer);
+		consumer = (DefaultMQPushConsumer) ReflectionUtils.objectPropertiesToOtherOne(consumerModel, consumer);
 
 		consumer.setConsumeFromWhere(ConsumeFromWhere.CONSUME_FROM_FIRST_OFFSET);
 		consumer.setNamesrvAddr(namesrvAddr);
 
 		System.out.println("persit="+consumer.getPersistConsumerOffsetInterval());
+		System.out.println("pullBatchSize="+consumer.getPullBatchSize());
 		System.out.println("namesrvAddr="+consumer.getNamesrvAddr());
 		try {
 			// 订阅专题

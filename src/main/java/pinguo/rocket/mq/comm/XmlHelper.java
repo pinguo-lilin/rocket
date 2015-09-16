@@ -26,7 +26,7 @@ import pinguo.rocket.mq.entity.Subscribe;
  * rocket.xml解析辅助类
  *
  */
-public class ConsumerXmlHelper {
+public class XmlHelper {
 	private String xmlPath;
 	private SAXReader saxReader;
 	private Map<String, Consumer> consumers = new HashMap<String, Consumer>() ;
@@ -34,14 +34,14 @@ public class ConsumerXmlHelper {
 	private Map<String, Map<String, Map<String, Strategy>>> strategys = new HashMap<String, Map<String, Map<String, Strategy>>>();
 	
 	//日志初始化
-	private final static Logger logger = LoggerFactory.getLogger(ConsumerXmlHelper.class); 
+	private final static Logger logger = LoggerFactory.getLogger(XmlHelper.class); 
 	 
 	/**
 	 * 初始化
 	 * 
 	 * @param String xmlPath	xml文件路径
 	 */
-	public ConsumerXmlHelper(String xmlPath) {
+	public XmlHelper(String xmlPath) {
 		this.xmlPath = xmlPath;
 		this.saxReader = new SAXReader();
 	}

@@ -4,7 +4,7 @@ public class Msg {
 	private String appName;
 	private String opcode;
 	private String info;
-	private long time;
+	private float time;
 	private String key;
 	
 	/**
@@ -17,7 +17,7 @@ public class Msg {
 	 * @param time		消息时间
 	 * @param key		消息业务ID,比如订单ID、用户ID
 	 */
-	public Msg(String appName, String opcode, String info, long time, String key) {
+	public Msg(String appName, String opcode, String info, float time, String key) {
 		this.appName = appName;
 		this.opcode = opcode;
 		this.info = info;
@@ -43,7 +43,7 @@ public class Msg {
 	public void setInfo(String info) {
 		this.info = info;
 	}
-	public long getTime() {
+	public float getTime() {
 		return time;
 	}
 	public void setTime(long time) {

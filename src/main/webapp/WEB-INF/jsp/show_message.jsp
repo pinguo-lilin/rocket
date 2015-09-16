@@ -7,6 +7,33 @@
 <title>Insert title here</title>
 </head>
 <body>
-show send msg page!
+<form action="/rocket/msg/send" method="post">
+	<table>
+		<tr>
+			<td>appName</td>
+			<td><input type="text" name="appName"></td>
+		</tr>
+		<tr>
+			<td>opcode</td>
+			<td><input type="text" name="opcode"></td>
+		</tr>
+		<tr>
+			<td>info</td>
+			<td><input type="text" name="info"></td>
+		</tr>
+		<tr>
+			<td>time</td>
+			<td><input type="text" name="time"></td>
+		</tr>
+		<tr>
+			<td>key</td>
+			<td><input type="text" name="key"></td>
+		</tr>
+		<tr>
+			<td></td>
+			<td><input type="submit" value="send"></td>
+		</tr>
+	</table>
+</form>
 </body>
 </html>
