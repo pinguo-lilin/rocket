@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import pinguo.rocket.mq.comm.PropertiesHelper;
 import pinguo.rocket.mq.entity.Consumer;
 import pinguo.rocket.mq.entity.Strategy;
 import pinguo.rocket.mq.entity.Subscribe;
@@ -15,11 +16,18 @@ import pinguo.rocket.mq.entity.Subscribe;
  */
 public abstract class AbstractConsumer {
 	protected String consumerName;
-	protected String namesrvAddr = "10.1.2.236:9876";
+	protected String namesrvAddr;
+	protected String defaultEnv = "testing";
+	protected String propertiesPath = "src/main/resources/config/" + this.defaultEnv + "/rmq.properties";
 	protected Map<String, Consumer> consumers = new HashMap<String, Consumer>();
 	protected Map<String, List<Subscribe>> subscribes = new HashMap<String, List<Subscribe>>();
 	protected Map<String, Map<String, Map<String, Strategy>>> strategys = new HashMap<String, Map<String, Map<String, Strategy>>>();
 
+	protected AbstractConsumer(){
+		PropertiesHelper pHelper = new PropertiesHelper(this.propertiesPath);
+		this.namesrvAddr = pHelper.getString("rmq.namesrvAddr");
+	}
+	
 	public abstract void start();
 
 	
@@ -46,5 +54,13 @@ public abstract class AbstractConsumer {
 
 	public void setStrategys(Map<String, Map<String, Map<String, Strategy>>> strategys) {
 		this.strategys = strategys;
+	}
+
+	public String getDefaultEnv() {
+		return defaultEnv;
+	}
+
+	public void setDefaultEnv(String defaultEnv) {
+		this.defaultEnv = defaultEnv;
 	}
 }

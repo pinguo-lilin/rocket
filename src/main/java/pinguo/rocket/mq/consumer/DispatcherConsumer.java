@@ -16,8 +16,9 @@ public class DispatcherConsumer {
 			System.out.println("没有初始化consumer");
 			return;
 		}
-		String consumerName = args[0];
-		String configPath = "src/main/resources/rocket.xml";
+		String contextEnv = "testing";// 运行环境每次打包切换
+		String consumerName = args[0];// 第一个参数默认consumerName
+		String configPath = "src/main/resources/rocket.xml";// rmq配置文件
 		
 		//解析xml
 		XmlHelper xmlHelper = new XmlHelper(configPath);
@@ -34,6 +35,8 @@ public class DispatcherConsumer {
 		
 		//消费
 		AbstractConsumer pushConsumer = new PushConsumer(consumerName);
+		
+		pushConsumer.setDefaultEnv(contextEnv);
 		pushConsumer.setConsumers(consumers);
 		pushConsumer.setSubscribes(subscribes);
 		pushConsumer.setStrategys(strategys);

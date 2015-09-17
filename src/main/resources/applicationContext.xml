@@ -29,8 +29,31 @@
 	
     <!-- 初始化消费者producer -->
 	<bean id="PinGuoProducer" class="com.alibaba.rocketmq.client.producer.DefaultMQProducer" scope="singleton">
-		<property name="producerGroup" value="PgProducerGroup"></property>
-		<property name="namesrvAddr" value="10.1.2.236:9876"></property>
+		<property name="producerGroup" value="${rmq.producerGroupName}"></property>
+		<property name="namesrvAddr" value="${rmq.namesrvAddr}"></property>
 	</bean>
-	  
+	
+	<!-- development环境 -->
+    <beans profile="development">
+        <context:property-placeholder ignore-unresolvable="true" file-encoding="utf-8" 
+        location="classpath:/config/development/rmq.properties" />
+    </beans>
+    
+	<!-- production环境 -->
+    <beans profile="production">
+        <context:property-placeholder ignore-unresolvable="true" file-encoding="utf-8" 
+        location="classpath:/config/production/rmq.properties" />
+    </beans>
+    
+	<!-- testing环境 -->
+    <beans profile="testing">
+        <context:property-placeholder ignore-unresolvable="true" file-encoding="utf-8" 
+        location="classpath:/config/testing/rmq.properties" />
+    </beans>
+    
+	<!-- testing-dev环境 -->
+    <beans profile="production">
+        <context:property-placeholder ignore-unresolvable="true" file-encoding="utf-8" 
+        location="classpath:/config/testing-dev/rmq.properties" />
+    </beans>
 </beans>

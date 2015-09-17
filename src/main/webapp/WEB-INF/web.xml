@@ -15,6 +15,12 @@
 		</param-value>
     </context-param>
     
+    <!-- 环境切换 -->
+    <context-param>
+		<param-name>spring.profiles.active</param-name>
+		<param-value>testing</param-value>
+	</context-param>
+	
 	<!-- POST中文乱码过滤器 -->
 	<filter>
 		<filter-name>CharacterEncodingFilter</filter-name>

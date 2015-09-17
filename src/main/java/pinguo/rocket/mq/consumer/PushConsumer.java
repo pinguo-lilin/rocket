@@ -24,6 +24,7 @@ import pinguo.rocket.mq.entity.Subscribe;
 public class PushConsumer extends AbstractConsumer {
 
 	public PushConsumer(String consumerName) {
+		super();
 		this.consumerName = consumerName;
 	}
 
