@@ -1,29 +1,18 @@
 package pinguo.rocket.mq.consumer;
 
-import java.io.BufferedInputStream;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.PropertyResourceBundle;
-import java.util.ResourceBundle;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Test {
+	private final static Logger logger = LoggerFactory.getLogger(Test.class); 
 	public static void main(String[] args) {
-//		InputStream inStream = ClassLoader.getSystemResourceAsStream("src/main/resources/config/production/rmq.properties");
-		 InputStream in = null;
-		try {
-			in = new BufferedInputStream(new FileInputStream("src/main/resources/config/production/rmq.properties"));
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		 try {
-			ResourceBundle rb = new PropertyResourceBundle(in);
-			System.out.println(rb.getString("rmq.namesrvAddr"));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		logger.trace("file-trace2");
+		logger.info("info message2");
+		logger.error("error message2");
+		Test t = new Test();
+		t.testA();
+	}
+	public void testA(){
+		logger.error("test a2");
 	}
 }

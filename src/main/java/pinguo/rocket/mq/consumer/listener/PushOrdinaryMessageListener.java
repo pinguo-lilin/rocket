@@ -20,36 +20,14 @@ import pinguo.rocket.mq.entity.Strategy;
  * PushConsumer顺序消息监听器
  *
  */
-public class PushOrdinaryMessageListener implements MessageListenerConcurrently{
-	private Map<String, Map<String, Strategy>> topicTagStrategys = new HashMap<String, Map<String, Strategy>>();
+public class PushOrdinaryMessageListener extends AbstractListener implements MessageListenerConcurrently{
 	
 	public PushOrdinaryMessageListener(Map<String, Map<String, Strategy>> topicTagStrategys){
 		this.topicTagStrategys = topicTagStrategys;
 	}
 	@Override
 	public ConsumeConcurrentlyStatus consumeMessage(List<MessageExt> msgs, ConsumeConcurrentlyContext context) {
-		// 消息属性
-		MessageExt msgExt = msgs.get(0);
-		String topic = msgExt.getTopic();
-		String tag = msgExt.getTags();
-		byte[] msg = msgExt.getBody();
-		String info = new String(msg);
-		
-		// 转发策略信息
-		Strategy strategy = this.topicTagStrategys.get(topic).get(tag);
-		String url = strategy.getUrl();
-		int timeOut = strategy.getTimeOut();
-		int retryTimes = strategy.getRetryTimes();
-
-		List<NameValuePair> params = new ArrayList<NameValuePair>();
-		params.add(new BasicNameValuePair("info", info));
-
-		// 转发消息
-		System.out.println("msg="+info);
-		System.out.println("url="+url);
-		System.out.println("timeOut="+timeOut);
-		System.out.println("retryTimes"+retryTimes);
-		
+		this.dispatherMessage(msgs);
 		return ConsumeConcurrentlyStatus.CONSUME_SUCCESS;
 	}
 }
