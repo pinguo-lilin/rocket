@@ -16,13 +16,17 @@ import pinguo.rocket.mq.entity.Strategy;
  *
  */
 public class PushOrderMessageListener extends AbstractListener implements MessageListenerOrderly {
+	
 	public PushOrderMessageListener(Map<String, Map<String, Strategy>> topicTagStrategys) {
 		this.topicTagStrategys = topicTagStrategys;
 	}
 
 	@Override
 	public ConsumeOrderlyStatus consumeMessage(List<MessageExt> msgs, ConsumeOrderlyContext context) {
-		boolean result = this.dispatherMessage(msgs);
-		return ConsumeOrderlyStatus.SUCCESS;
+		boolean result =  this.dispatherMessage(msgs);
+		if(result){
+			return ConsumeOrderlyStatus.SUCCESS;
+		}
+		return ConsumeOrderlyStatus.SUSPEND_CURRENT_QUEUE_A_MOMENT;
 	}
 }

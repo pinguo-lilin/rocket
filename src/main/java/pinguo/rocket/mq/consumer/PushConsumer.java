@@ -3,6 +3,9 @@ package pinguo.rocket.mq.consumer;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.alibaba.rocketmq.client.consumer.DefaultMQPushConsumer;
 import com.alibaba.rocketmq.client.consumer.listener.MessageListenerConcurrently;
 import com.alibaba.rocketmq.client.consumer.listener.MessageListenerOrderly;
@@ -23,13 +26,15 @@ import pinguo.rocket.mq.entity.Subscribe;
  */
 public class PushConsumer extends AbstractConsumer {
 
+	private final static Logger logger = LoggerFactory.getLogger(PushConsumer.class);
+	
 	public PushConsumer(String consumerName) {
 		super();
 		this.consumerName = consumerName;
 	}
 
 	@Override
-	public void start() {
+	public void start() throws MQClientException {
 		Consumer consumerModel = consumers.get(consumerName);
 		List<Subscribe> subscribeList = subscribes.get(consumerName);
 
@@ -40,31 +45,30 @@ public class PushConsumer extends AbstractConsumer {
 		consumer.setConsumeFromWhere(ConsumeFromWhere.CONSUME_FROM_FIRST_OFFSET);
 		consumer.setNamesrvAddr(namesrvAddr);
 
-		System.out.println("persit="+consumer.getPersistConsumerOffsetInterval());
-		System.out.println("pullBatchSize="+consumer.getPullBatchSize());
-		System.out.println("namesrvAddr="+consumer.getNamesrvAddr());
-		try {
-			// 订阅专题
-			for (Subscribe subscribe : subscribeList) {
-				consumer.subscribe(subscribe.getTopic(), subscribe.getTags());
-			}
+		System.out.println("persit=" + consumer.getPersistConsumerOffsetInterval());
+		System.out.println("pullBatchSize=" + consumer.getPullBatchSize());
+		System.out.println("namesrvAddr=" + consumer.getNamesrvAddr());
 
-			// 转发策略初始化
-			Map<String, Map<String, Strategy>> topicTagStrategys = this.strategys.get(consumerName);
-
-			// 顺序消息
-			if (consumerModel.getOrder()) {
-				MessageListenerOrderly messageListener = new PushOrderMessageListener(topicTagStrategys);
-				consumer.registerMessageListener(messageListener);
-			// 无序消息
-			} else {
-				MessageListenerConcurrently messageListener = new PushOrdinaryMessageListener(topicTagStrategys);
-				consumer.registerMessageListener(messageListener);
-			}
-			consumer.start();
-		} catch (MQClientException e) {
-			e.printStackTrace();
-			System.out.println("PushConsumer初始化失败，error=" + e.getMessage());
+		logger.info("consumer=" + consumerName + "启动参数 parmas=" + consumer.toString());
+		// 订阅专题
+		for (Subscribe subscribe : subscribeList) {
+			consumer.subscribe(subscribe.getTopic(), subscribe.getTags());
 		}
+
+		// 转发策略初始化
+		Map<String, Map<String, Strategy>> topicTagStrategys = this.strategys.get(consumerName);
+
+		// 顺序消息
+		if (consumerModel.getOrder()) {
+			MessageListenerOrderly messageListener = new PushOrderMessageListener(topicTagStrategys);
+			consumer.registerMessageListener(messageListener);
+			logger.trace("consumer=" + consumerName + "顺序消费已启动...");
+			// 普通消息
+		} else {
+			MessageListenerConcurrently messageListener = new PushOrdinaryMessageListener(topicTagStrategys);
+			consumer.registerMessageListener(messageListener);
+			logger.trace("consumer=" + consumerName + "普通消费已启动...");
+		}
+		consumer.start();
 	}
 }

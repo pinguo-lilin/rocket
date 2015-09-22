@@ -1,9 +1,13 @@
 package pinguo.rocket.mq.comm;
 
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 import org.apache.http.HttpEntity;
+import org.apache.http.HttpException;
 import org.apache.http.NameValuePair;
+import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -60,22 +64,25 @@ public class HttpHelper {
 	 * 		JSONObject jsonObject = JSONObject.parseObject(jsonStr);
 	 * 		JSONArray jsonAry = JSON.parseArray(str);
 	 * </pre>
+	 * @throws IOException 
+	 * @throws ClientProtocolException 
+	 * @throws HttpException 
 	 * @throws Exception
 	 */
-	public static String post(String url, List<NameValuePair> params, int requestTimeOut) throws Exception {
+	public static String post(String url, List<NameValuePair> params, int requestTimeOut) throws ClientProtocolException, IOException, HttpException  {
 		CloseableHttpClient httpclient = HttpClientBuilder.create().build();
 		HttpPost httppost = new HttpPost(url);
 		httppost.setEntity(new UrlEncodedFormEntity(params));
 		
 		//设置请求超时和传输超时
-		RequestConfig requestConfig = RequestConfig.custom().setConnectionRequestTimeout(requestTimeOut).setConnectTimeout(500)
-				.setSocketTimeout(500).build();
+		RequestConfig requestConfig = RequestConfig.custom().setConnectionRequestTimeout(requestTimeOut).setConnectTimeout(5000)
+				.setSocketTimeout(5000).build();
 		
 		httppost.setConfig(requestConfig);
 		CloseableHttpResponse response = httpclient.execute(httppost);
 		int status = response.getStatusLine().getStatusCode();
 		if (status != 200) {
-			throw new Exception("调用失败");
+			throw new HttpException("调用成功，返回状态码错误，status=" + status);
 		}
 		
 		HttpEntity entity = response.getEntity();

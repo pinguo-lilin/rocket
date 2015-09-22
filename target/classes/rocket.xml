@@ -3,9 +3,9 @@
 	<consumer name="cc_album" persistConsumerOffsetInterval="5009" pullBatchSize="128">
 		<topic name="cc">
 			<tag name="comment.addLike" >
-				<url>/album/inner/mq/MqComment</url>
-				<timeOut>30</timeOut>
-				<retryTimes>2</retryTimes>
+				<url>http://www.stelin.com/rmq.php</url>
+				<timeOut>10000</timeOut>
+				<retryTimes>3</retryTimes>
 			</tag>
 			<tag name="comment.addComm">
 				<url>/album/inner/mq/MqComment</url>

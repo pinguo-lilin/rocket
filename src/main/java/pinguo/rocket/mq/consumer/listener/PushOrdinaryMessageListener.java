@@ -1,12 +1,7 @@
 package pinguo.rocket.mq.consumer.listener;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
 
 import com.alibaba.rocketmq.client.consumer.listener.ConsumeConcurrentlyContext;
 import com.alibaba.rocketmq.client.consumer.listener.ConsumeConcurrentlyStatus;
@@ -25,9 +20,15 @@ public class PushOrdinaryMessageListener extends AbstractListener implements Mes
 	public PushOrdinaryMessageListener(Map<String, Map<String, Strategy>> topicTagStrategys){
 		this.topicTagStrategys = topicTagStrategys;
 	}
+
 	@Override
 	public ConsumeConcurrentlyStatus consumeMessage(List<MessageExt> msgs, ConsumeConcurrentlyContext context) {
-		this.dispatherMessage(msgs);
-		return ConsumeConcurrentlyStatus.CONSUME_SUCCESS;
+		boolean result = this.dispatherMessage(msgs);
+		if (result) {
+			logger.trace(this.consumerId + "消息消费成功，msgs=" + msgs.toString());
+			return ConsumeConcurrentlyStatus.CONSUME_SUCCESS;
+		}
+		logger.error(this.consumerId + "消息消费失败,稍后重试，msgs=" + msgs.toString());
+		return ConsumeConcurrentlyStatus.RECONSUME_LATER;
 	}
 }

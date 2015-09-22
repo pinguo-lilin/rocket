@@ -4,7 +4,7 @@ public class Strategy {
 	private String url;
 	private int timeOut = 300;
 	private int retryTimes = 3;
-	private int sendInterval = 100;
+	private int sendInterval = 10;
 	
 	public int getSendInterval() {
 		return sendInterval;
@@ -29,5 +29,10 @@ public class Strategy {
 	}
 	public void setRetryTimes(int retryTimes) {
 		this.retryTimes = retryTimes;
+	}
+	
+	@Override
+	public String toString() {
+		return "url=" + this.url + " timeOut=" + this.timeOut + " retryTimes=" + this.retryTimes + " sendInterval=" + this.sendInterval;
 	}
 }

@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.alibaba.rocketmq.client.exception.MQClientException;
+
 import pinguo.rocket.mq.comm.PropertiesHelper;
 import pinguo.rocket.mq.entity.Consumer;
 import pinguo.rocket.mq.entity.Strategy;
@@ -28,7 +30,7 @@ public abstract class AbstractConsumer {
 		this.namesrvAddr = pHelper.getString("rmq.namesrvAddr");
 	}
 	
-	public abstract void start();
+	public abstract void start() throws MQClientException;
 
 	
 	/*********************************** getter and setter ************************************/

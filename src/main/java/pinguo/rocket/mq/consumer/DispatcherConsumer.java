@@ -4,6 +4,10 @@ import java.util.List;
 import java.util.Map;
 
 import org.dom4j.DocumentException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.alibaba.rocketmq.client.exception.MQClientException;
 
 import pinguo.rocket.mq.comm.XmlHelper;
 import pinguo.rocket.mq.entity.Consumer;
@@ -11,9 +15,11 @@ import pinguo.rocket.mq.entity.Strategy;
 import pinguo.rocket.mq.entity.Subscribe;
 
 public class DispatcherConsumer {
+	private final static Logger logger = LoggerFactory.getLogger(DispatcherConsumer.class);
+	
 	public static void main(String[] args) throws DocumentException {
 		if (args.length == 0) {
-			System.out.println("没有初始化consumer");
+			logger.error("args为空，没有可初始化的consumer");
 			return;
 		}
 		String contextEnv = "testing";// 运行环境每次打包切换
@@ -29,7 +35,7 @@ public class DispatcherConsumer {
 
 		//条件过滤
 		if (!consumers.containsKey(consumerName) || !subscribes.containsKey(consumerName)) {
-			System.out.println("没有满足条件的consumer");
+			logger.error("consumer没有配置，请确认配置文件rocket.xml");
 			return;
 		}
 		
@@ -40,7 +46,11 @@ public class DispatcherConsumer {
 		pushConsumer.setConsumers(consumers);
 		pushConsumer.setSubscribes(subscribes);
 		pushConsumer.setStrategys(strategys);
-		pushConsumer.start();
-		System.out.println("consumer启动成功......");
+		try {
+			pushConsumer.start();
+			logger.trace("consumer=" + consumerName + "已经启动...");
+		} catch (MQClientException e) {
+			logger.error("consumer=" + consumerName + "启动失败，error=" + e.getMessage());
+		}
 	}
 }
