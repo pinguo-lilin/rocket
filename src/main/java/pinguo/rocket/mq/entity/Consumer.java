@@ -2,6 +2,8 @@ package pinguo.rocket.mq.entity;
 
 public class Consumer {
 
+	public static final String TYPE_PULL = "pull";
+	public static final String TYPE_PUSH = "push";
 	private String name;
 	private String type;
 	private boolean order;

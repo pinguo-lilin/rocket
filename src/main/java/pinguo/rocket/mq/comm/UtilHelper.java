@@ -1,6 +1,15 @@
 package pinguo.rocket.mq.comm;
 
 public class UtilHelper {
+	
+	/**
+	 * 获取配置properties类
+	 * @return PropertyManage
+	 */
+	public static PropertyManage getProperties() {
+		return (PropertyManage) ApplicationContextUtil.getBean("propertyManage");
+	}
+	
 	/**
 	 * 字符串首字母小写
 	 * 

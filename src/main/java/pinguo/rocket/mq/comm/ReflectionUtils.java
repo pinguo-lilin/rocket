@@ -1,9 +1,10 @@
 package pinguo.rocket.mq.comm;
 
 import java.lang.reflect.Field;
-
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 
@@ -96,6 +97,20 @@ public class ReflectionUtils {
 		}
 
 		return null;
+	}
+	
+	public static Map<String, Object> getProperties(Object object) {
+		Map<String, Object> properties = new HashMap<String, Object>();
+
+		Class<?> clazz = object.getClass();
+		Field[] fields = clazz.getDeclaredFields();
+
+		for (Field field : fields) {
+			String fieldName = field.getName();
+			Object fieldVal = getFieldValue(object, fieldName);
+			properties.put(fieldName, fieldVal);
+		}
+		return properties;
 	}
 	
 	/**
