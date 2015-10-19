@@ -75,8 +75,10 @@ public class HttpHelper {
 		httppost.setEntity(new UrlEncodedFormEntity(params));
 		
 		//设置请求超时和传输超时
+//		RequestConfig requestConfig = RequestConfig.custom().setConnectionRequestTimeout(requestTimeOut).setConnectTimeout(5000)
+//				.setSocketTimeout(5000).build();
 		RequestConfig requestConfig = RequestConfig.custom().setConnectionRequestTimeout(requestTimeOut).setConnectTimeout(5000)
-				.setSocketTimeout(5000).build();
+				.build();
 		
 		httppost.setConfig(requestConfig);
 		CloseableHttpResponse response = httpclient.execute(httppost);

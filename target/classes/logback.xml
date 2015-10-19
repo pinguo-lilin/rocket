@@ -19,7 +19,7 @@
             <onMismatch>DENY</onMismatch>
         </filter>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <FileNamePattern>C:\Users\admin\www\logs\application.log.%d{yyyyMMdd}</FileNamePattern>
+            <FileNamePattern>C:\Users\admin\www\logs\notice.log.%d{yyyyMMdd}</FileNamePattern>
             <MaxHistory>30</MaxHistory>
         </rollingPolicy>
         <encoder>
@@ -34,7 +34,7 @@
             <onMismatch>DENY </onMismatch>
         </filter>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <FileNamePattern>C:\Users\admin\www\logs\application.log.%d{yyyyMMdd}</FileNamePattern>
+            <FileNamePattern>C:\Users\admin\www\logs\notice.log.%d{yyyyMMdd}</FileNamePattern>
             <MaxHistory>30</MaxHistory>
         </rollingPolicy>
         <encoder>
@@ -50,7 +50,7 @@
             <onMismatch>DENY </onMismatch>
         </filter>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <FileNamePattern>C:\Users\admin\www\logs\notice.log.%d{yyyyMMdd}</FileNamePattern>
+            <FileNamePattern>C:\Users\admin\www\logs\application.log.%d{yyyyMMdd}</FileNamePattern>
             <MaxHistory>30</MaxHistory>
         </rollingPolicy>
         <encoder>

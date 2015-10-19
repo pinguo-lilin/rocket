@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -16,6 +17,7 @@ import com.alibaba.rocketmq.client.exception.MQClientException;
 import com.alibaba.rocketmq.remoting.exception.RemotingException;
 
 import pinguo.rocket.mq.comm.ResultCode;
+import pinguo.rocket.mq.comm.ValidateHelper;
 import pinguo.rocket.mq.entity.Msg;
 import pinguo.rocket.mq.entity.ResultStatus;
 import pinguo.rocket.mq.exception.ProducerException;
@@ -30,7 +32,7 @@ public class MessageController {
 	@Resource
 	private MessageService messageService;
 	
-	@RequestMapping(value = "send")
+	@RequestMapping(value = "send", method = RequestMethod.POST)
 	@ResponseBody
 	public ResultStatus send(HttpServletRequest request, HttpServletResponse response){
 		String appName = request.getParameter("appName");
@@ -38,10 +40,19 @@ public class MessageController {
 		String info    = request.getParameter("info");
 		String time    = request.getParameter("time");
 		String key     = request.getParameter("key");
-		
 		//参数验证
-		if(appName.isEmpty() || opcode.isEmpty() || info.isEmpty() || time.isEmpty()){
-			logger.error("参数验证错误，appName" + appName + " opcode=" + opcode + " info=" + info + " time=" + time + " key=" + key);
+		if (ValidateHelper.isEmpty(appName) || ValidateHelper.isEmpty(opcode) || ValidateHelper.isEmpty(info) || ValidateHelper.isEmpty(time)) {
+			logger.error("参数不能为空，appName" + appName + " opcode=" + opcode + " info=" + info + " time=" + time + " key=" + key);
+			return new ResultStatus(ResultCode.PARAMETER_ERROR, "参数错误", null);
+		}
+
+		if (!ValidateHelper.isRightfulString(appName) || !ValidateHelper.isRightfulString(opcode)) {
+			logger.error("appName或opcode参数格式不正确，appName" + appName + " opcode=" + opcode + " info=" + info + " time=" + time + " key=" + key);
+			return new ResultStatus(ResultCode.PARAMETER_ERROR, "参数错误", null);
+		}
+
+		if (!ValidateHelper.isFloat(time)) {
+			logger.error("time参数格式不正确，appName" + appName + " opcode=" + opcode + " info=" + info + " time=" + time + " key=" + key);
 			return new ResultStatus(ResultCode.PARAMETER_ERROR, "参数错误", null);
 		}
 		
@@ -66,7 +77,7 @@ public class MessageController {
 			logger.error("ProducerException:消息发送失败，error=" + producerException.getMessage());
 		}
 		
-		if(result == true){
+		if (result == true) {
 			return new ResultStatus(ResultCode.SUCCESS, "消息发送成功", null);
 		}
 		return new ResultStatus(ResultCode.SERVER_ERROR, "服务器异常", null);

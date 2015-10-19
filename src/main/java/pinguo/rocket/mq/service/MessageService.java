@@ -40,9 +40,9 @@ public class MessageService {
 	 */
 	public boolean send(Msg msg) throws MQClientException, RemotingException, MQBrokerException, InterruptedException, ProducerException {
 		String topic = msg.getAppName();
-		String tag = msg.getOpcode();
-		String body = msg.getInfo();
-		String key = msg.getKey();
+		String tag   = msg.getOpcode();
+		String body  = msg.getInfo();
+		String key   = msg.getKey();
 
 		// 发送消息
 		DefaultMQProducer producer = (DefaultMQProducer) ApplicationContextUtil.getBean("PinGuoProducer");

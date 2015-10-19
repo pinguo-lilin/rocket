@@ -43,9 +43,10 @@ public class PushConsumer extends AbstractConsumer {
 		// 初始化
 		pushConsumer = (DefaultMQPushConsumer) ReflectionUtils.objectPropertiesToOtherOne(consumerModel, pushConsumer);
 
-		pushConsumer.setConsumeFromWhere(ConsumeFromWhere.CONSUME_FROM_LAST_OFFSET);
+		pushConsumer.setConsumeFromWhere(ConsumeFromWhere.CONSUME_FROM_FIRST_OFFSET);
 		pushConsumer.setNamesrvAddr(namesrvAddr);
 
+		pushConsumer.setConsumeMessageBatchMaxSize(1);
 		System.out.println("persit=" + pushConsumer.getPersistConsumerOffsetInterval());
 		System.out.println("pullBatchSize=" + pushConsumer.getPullBatchSize());
 		System.out.println("namesrvAddr2=" + pushConsumer.getNamesrvAddr());

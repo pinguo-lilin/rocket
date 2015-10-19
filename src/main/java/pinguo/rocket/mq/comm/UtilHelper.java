@@ -11,6 +11,19 @@ public class UtilHelper {
 	}
 	
 	/**
+	 * 字符串是否为空
+	 * 
+	 * @param str
+	 * @return
+	 */
+	public static boolean isEmpty(String str) {
+		if (str == null || str.isEmpty()) {
+			return true;
+		}
+		return false;
+	}
+	
+	/**
 	 * 字符串首字母小写
 	 * 
 	 * @param str

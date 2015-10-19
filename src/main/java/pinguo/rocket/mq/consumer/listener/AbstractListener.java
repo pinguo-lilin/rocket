@@ -56,39 +56,50 @@ public class AbstractListener {
 		
 		// 转发消息
 		boolean isSuccess = false;
-		try {
-			for (int i = 0; i < retryTimes; i++) {
+		for (int i = 0; i < retryTimes; i++) {
 
-				long startTime = System.currentTimeMillis();
-				String result = HttpHelper.post(url, params, timeOut);
-				logger.trace(consumerId + "服务器路由返回数据，"+result);
-				long endTime = System.currentTimeMillis();
-				JSONObject jsonObject = JSONObject.parseObject(result);
-				
-				if (!jsonObject.containsKey("status")) {
-					logger.trace(consumerId + "第" + (i + 1) + "次消费失败，服务器返回数据格式错误，result=" + result);
-				} else if (jsonObject.getInteger("status") == ResultCode.SERVER_ERROR) {
-					logger.trace(consumerId + "第" + (i + 1) + "次消费失败，服务器异常，返回" + ResultCode.SERVER_ERROR + "错误");
-				} else if (jsonObject.getInteger("status") == ResultCode.SUCCESS) {
-					isSuccess = true;
-					float totalTime = (endTime - startTime) / 1000;// 单位秒
-					logger.trace(consumerId + "消息在第" + (i + 1) + "次，消费成功，总共耗时" + totalTime + "秒");
-					break;
-				} else {
-					logger.trace(consumerId + "第" + (i + 1) + "次消费失败，服务器返回status无法识别，status=" + jsonObject.getInteger("status"));
-				}
-				Thread.sleep(intervalTime);
+			int times = i + 1;
+			String tips = "第" + times + "次消费";
+			long startTime = System.currentTimeMillis();
+			String result = "";
+			try {
+				result = HttpHelper.post(url, params, timeOut);
+			} catch (ClientProtocolException clientProtocolException) {
+				logger.error(consumerId + tips + "，httpPost异常，ClientProtocolException=" + clientProtocolException.getMessage());
+				continue;
+			} catch (IOException ioException) {
+				logger.error(consumerId + tips +  "，httpPost异常，IOException=" + ioException.getMessage() + " info=" + info);
+				continue;
+			} catch (HttpException httpException) {
+				logger.error(consumerId + tips +  "，httpPost异常，HttpException=" + httpException.getMessage());
+				continue;
+			} catch (Exception exception){
+				logger.error(consumerId + tips +  "，其它异常错误=" + exception.getMessage());
+				continue;
 			}
-		} catch (ClientProtocolException clientProtocolException) {
-			logger.error(consumerId + "httpPost异常，ClientProtocolException=" + clientProtocolException.getMessage());
-		} catch (IOException ioException) {
-			logger.error(consumerId + "httpPost异常，IOException=" + ioException.getMessage());
-		} catch (HttpException httpException) {
-			logger.error(consumerId + "httpPost异常，HttpException=" + httpException.getMessage());
-		} catch (InterruptedException interruptedException) {
-			logger.error(consumerId + "sleep异常，InterruptedException=" + interruptedException.getMessage());
-		} catch (Exception exception){
-			logger.error(consumerId + "其它异常，Exception=" + exception.getMessage());
+
+			logger.trace(consumerId + tips +  "服务器路由返回数据，" + result);
+			long endTime = System.currentTimeMillis();
+			JSONObject jsonObject = JSONObject.parseObject(result);
+
+			if (!jsonObject.containsKey("status")) {
+				logger.trace(consumerId + tips + "次消费失败，服务器返回数据格式错误，result=" + result);
+			} else if (jsonObject.getInteger("status") == ResultCode.SERVER_ERROR) {
+				logger.trace(consumerId + tips + "次消费失败，服务器异常，返回" + ResultCode.SERVER_ERROR + "错误");
+			} else if (jsonObject.getInteger("status") == ResultCode.SUCCESS) {
+				isSuccess = true;
+				float totalTime = (endTime - startTime);// 单位毫秒
+				logger.trace(consumerId + tips + "成功，总共耗时" + totalTime + "秒");
+				break;
+			} else {
+				logger.trace(consumerId + tips + "失败，服务器返回status无法识别，status=" + jsonObject.getInteger("status"));
+			}
+
+			try {
+				Thread.sleep(intervalTime);
+			} catch (InterruptedException interruptedException) {
+				logger.error(consumerId + tips +  "，sleep异常，InterruptedException=" + interruptedException.getMessage());
+			}
 		}
 		
 		return isSuccess;
