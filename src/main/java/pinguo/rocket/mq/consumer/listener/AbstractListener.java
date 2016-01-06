@@ -89,7 +89,7 @@ public class AbstractListener {
 			} else if (jsonObject.getInteger("status") == ResultCode.SUCCESS) {
 				isSuccess = true;
 				float totalTime = (endTime - startTime);// 单位毫秒
-				logger.trace(consumerId + tips + "成功，总共耗时" + totalTime + "秒");
+				logger.trace(consumerId + tips + "成功，总共耗时" + totalTime + "毫秒");
 				break;
 			} else {
 				logger.trace(consumerId + tips + "失败，服务器返回status无法识别，status=" + jsonObject.getInteger("status"));
