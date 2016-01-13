@@ -19,75 +19,75 @@ import org.apache.http.util.EntityUtils;
 
 
 public class HttpHelper {
-	
-	/**
-	 * GET请求
-	 * 
-	 * @param urlWithParams		请求路径并且包含参数
-	 * @param requestTimeOut	请求超时时间
-	 * @return string 			返回字符串
-	 * <pre>
-	 * 		可以用户JSONObject和JSONArray自行转换
-	 * 		JSONObject jsonObject = JSONObject.parseObject(jsonStr);
-	 * 		JSONArray jsonAry = JSON.parseArray(str);
-	 * </pre>
-	 * @throws Exception
-	 */
-	public static String get(String urlWithParams, int requestTimeOut) throws Exception {
-		CloseableHttpClient httpclient = HttpClientBuilder.create().build();
-		HttpGet httpget = new HttpGet(urlWithParams);
-		RequestConfig requestConfig = RequestConfig.custom().setConnectionRequestTimeout(requestTimeOut).setConnectTimeout(200)
-				.setSocketTimeout(200).build();
-		httpget.setConfig(requestConfig);
 
-		CloseableHttpResponse response = httpclient.execute(httpget);
+    /**
+     * GET请求
+     *
+     * @param urlWithParams  请求路径并且包含参数
+     * @param requestTimeOut 请求超时时间
+     * @return string            返回字符串
+     * <pre>
+     *     可以用户JSONObject和JSONArray自行转换
+     *     JSONObject jsonObject = JSONObject.parseObject(jsonStr);
+     *     JSONArray jsonAry = JSON.parseArray(str);
+     * </pre>
+     * @throws Exception
+     */
+    public static String get(String urlWithParams, int requestTimeOut) throws Exception {
+        CloseableHttpClient httpclient = HttpClientBuilder.create().build();
+        HttpGet httpget = new HttpGet(urlWithParams);
+        RequestConfig requestConfig = RequestConfig.custom().setConnectionRequestTimeout(requestTimeOut).setConnectTimeout(200)
+                .setSocketTimeout(200).build();
+        httpget.setConfig(requestConfig);
 
-		int status = response.getStatusLine().getStatusCode();
-		if (status != 200) {
-			throw new Exception("调用失败");
-		}
-		HttpEntity entity = response.getEntity();
-		String jsonStr = EntityUtils.toString(entity, "utf-8");
-		httpget.releaseConnection();
-		return jsonStr;
-	}
-	
-	/**
-	 * POST请求
-	 * 
-	 * @param url				请求路径
-	 * @param params			请求参数
-	 * @param requestTimeOut	请求超时时间
-	 * @return string 			返回字符串
-	 * <pre>
-	 * 		可以用户JSONObject和JSONArray自行转换
-	 * 		JSONObject jsonObject = JSONObject.parseObject(jsonStr);
-	 * 		JSONArray jsonAry = JSON.parseArray(str);
-	 * </pre>
-	 * @throws IOException 
-	 * @throws ClientProtocolException 
-	 * @throws HttpException 
-	 * @throws Exception
-	 */
-	public static String post(String url, List<NameValuePair> params, int requestTimeOut) throws ClientProtocolException, IOException, HttpException  {
-		CloseableHttpClient httpclient = HttpClientBuilder.create().build();
-		HttpPost httppost = new HttpPost(url);
-		httppost.setEntity(new UrlEncodedFormEntity(params));
-		
-		//设置请求超时和传输超时
-		RequestConfig requestConfig = RequestConfig.custom().setConnectionRequestTimeout(requestTimeOut).setConnectTimeout(5000)
-				.setSocketTimeout(5000).build();
-		
-		httppost.setConfig(requestConfig);
-		CloseableHttpResponse response = httpclient.execute(httppost);
-		int status = response.getStatusLine().getStatusCode();
-		if (status != 200) {
-			throw new HttpException("调用成功，返回状态码错误，status=" + status);
-		}
-		
-		HttpEntity entity = response.getEntity();
-		String jsonStr = EntityUtils.toString(entity, "utf-8");
-		httppost.releaseConnection();
-		return jsonStr;
-	}
+        CloseableHttpResponse response = httpclient.execute(httpget);
+
+        int status = response.getStatusLine().getStatusCode();
+        if (status != 200) {
+            throw new Exception("调用失败");
+        }
+        HttpEntity entity = response.getEntity();
+        String jsonStr = EntityUtils.toString(entity, "utf-8");
+        httpget.releaseConnection();
+        return jsonStr;
+    }
+
+    /**
+     * POST请求
+     *
+     * @param url            请求路径
+     * @param params         请求参数
+     * @param requestTimeOut 请求超时时间
+     * @return string            返回字符串
+     * <pre>
+     * 		可以用户JSONObject和JSONArray自行转换
+     * 		JSONObject jsonObject = JSONObject.parseObject(jsonStr);
+     * 		JSONArray jsonAry = JSON.parseArray(str);
+     * </pre>
+     * @throws IOException
+     * @throws ClientProtocolException
+     * @throws HttpException
+     * @throws Exception
+     */
+    public static String post(String url, List<NameValuePair> params, int requestTimeOut) throws ClientProtocolException, IOException, HttpException {
+        CloseableHttpClient httpclient = HttpClientBuilder.create().build();
+        HttpPost httppost = new HttpPost(url);
+        httppost.setEntity(new UrlEncodedFormEntity(params));
+
+        //设置请求超时和传输超时
+        RequestConfig requestConfig = RequestConfig.custom().setConnectionRequestTimeout(requestTimeOut).setConnectTimeout(5000)
+                .setSocketTimeout(5000).build();
+
+        httppost.setConfig(requestConfig);
+        CloseableHttpResponse response = httpclient.execute(httppost);
+        int status = response.getStatusLine().getStatusCode();
+        if (status != 200) {
+            throw new HttpException("调用成功，返回状态码错误，status=" + status);
+        }
+
+        HttpEntity entity = response.getEntity();
+        String jsonStr = EntityUtils.toString(entity, "utf-8");
+        httppost.releaseConnection();
+        return jsonStr;
+    }
 }

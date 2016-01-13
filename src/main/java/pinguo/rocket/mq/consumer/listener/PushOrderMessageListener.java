@@ -11,22 +11,20 @@ import com.alibaba.rocketmq.common.message.MessageExt;
 import pinguo.rocket.mq.entity.Strategy;
 
 /**
- * 
  * PushConsumer无序消息监听器
- *
  */
 public class PushOrderMessageListener extends AbstractListener implements MessageListenerOrderly {
-	
-	public PushOrderMessageListener(Map<String, Map<String, Strategy>> topicTagStrategys) {
-		this.topicTagStrategys = topicTagStrategys;
-	}
 
-	@Override
-	public ConsumeOrderlyStatus consumeMessage(List<MessageExt> msgs, ConsumeOrderlyContext context) {
-		boolean result =  this.dispatherMessage(msgs);
-		if(result){
-			return ConsumeOrderlyStatus.SUCCESS;
-		}
-		return ConsumeOrderlyStatus.SUSPEND_CURRENT_QUEUE_A_MOMENT;
-	}
+    public PushOrderMessageListener(Map<String, Map<String, Strategy>> topicTagStrategys) {
+        this.topicTagStrategys = topicTagStrategys;
+    }
+
+    @Override
+    public ConsumeOrderlyStatus consumeMessage(List<MessageExt> msgs, ConsumeOrderlyContext context) {
+        boolean result = this.dispatherMessage(msgs);
+        if (result) {
+            return ConsumeOrderlyStatus.SUCCESS;
+        }
+        return ConsumeOrderlyStatus.SUSPEND_CURRENT_QUEUE_A_MOMENT;
+    }
 }

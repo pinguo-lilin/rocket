@@ -12,57 +12,57 @@ import pinguo.rocket.mq.entity.Strategy;
 import pinguo.rocket.mq.entity.Subscribe;
 
 /**
- * 
  * 抽象consumer
- *
  */
 public abstract class AbstractConsumer {
-	protected String consumerName;
-	protected String namesrvAddr;
-	protected String defaultEnv = "testing";
-	protected String propertiesPath = "src/main/resources/config/" + this.defaultEnv + "/rmq.properties";
-	protected Map<String, Consumer> consumers = new HashMap<String, Consumer>();
-	protected Map<String, List<Subscribe>> subscribes = new HashMap<String, List<Subscribe>>();
-	protected Map<String, Map<String, Map<String, Strategy>>> strategys = new HashMap<String, Map<String, Map<String, Strategy>>>();
+    protected String consumerName;
+    protected String namesrvAddr;
+    protected String defaultEnv = "testing";
+    protected String propertiesPath = "src/main/resources/config/" + this.defaultEnv + "/rmq.properties";
+    protected Map<String, Consumer> consumers = new HashMap<String, Consumer>();
+    protected Map<String, List<Subscribe>> subscribes = new HashMap<String, List<Subscribe>>();
+    protected Map<String, Map<String, Map<String, Strategy>>> strategys = new HashMap<String, Map<String, Map<String, Strategy>>>();
 
-	protected AbstractConsumer(){
-		PropertiesHelper pHelper = new PropertiesHelper(this.propertiesPath);
-		this.namesrvAddr = pHelper.getString("rmq.namesrvAddr");
-	}
-	
-	public abstract void start() throws MQClientException;
+    protected AbstractConsumer() {
+        PropertiesHelper pHelper = new PropertiesHelper(this.propertiesPath);
+        this.namesrvAddr = pHelper.getString("rmq.namesrvAddr");
+    }
 
-	
-	/*********************************** getter and setter ************************************/
-	public Map<String, Consumer> getConsumers() {
-		return consumers;
-	}
+    public abstract void start() throws MQClientException;
 
-	public void setConsumers(Map<String, Consumer> consumers) {
-		this.consumers = consumers;
-	}
 
-	public Map<String, List<Subscribe>> getSubscribes() {
-		return subscribes;
-	}
+    /***********************************
+     * getter and setter
+     ************************************/
+    public Map<String, Consumer> getConsumers() {
+        return consumers;
+    }
 
-	public void setSubscribes(Map<String, List<Subscribe>> subscribes) {
-		this.subscribes = subscribes;
-	}
+    public void setConsumers(Map<String, Consumer> consumers) {
+        this.consumers = consumers;
+    }
 
-	public Map<String, Map<String, Map<String, Strategy>>> getStrategys() {
-		return strategys;
-	}
+    public Map<String, List<Subscribe>> getSubscribes() {
+        return subscribes;
+    }
 
-	public void setStrategys(Map<String, Map<String, Map<String, Strategy>>> strategys) {
-		this.strategys = strategys;
-	}
+    public void setSubscribes(Map<String, List<Subscribe>> subscribes) {
+        this.subscribes = subscribes;
+    }
 
-	public String getDefaultEnv() {
-		return defaultEnv;
-	}
+    public Map<String, Map<String, Map<String, Strategy>>> getStrategys() {
+        return strategys;
+    }
 
-	public void setDefaultEnv(String defaultEnv) {
-		this.defaultEnv = defaultEnv;
-	}
+    public void setStrategys(Map<String, Map<String, Map<String, Strategy>>> strategys) {
+        this.strategys = strategys;
+    }
+
+    public String getDefaultEnv() {
+        return defaultEnv;
+    }
+
+    public void setDefaultEnv(String defaultEnv) {
+        this.defaultEnv = defaultEnv;
+    }
 }
