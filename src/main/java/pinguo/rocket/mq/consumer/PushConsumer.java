@@ -44,6 +44,7 @@ public class PushConsumer extends AbstractConsumer {
         consumer.setNamesrvAddr(namesrvAddr);
 
         System.out.println("persit=" + consumer.getPersistConsumerOffsetInterval());
+        // 不是push?
         System.out.println("pullBatchSize=" + consumer.getPullBatchSize());
         System.out.println("namesrvAddr=" + consumer.getNamesrvAddr());
 
