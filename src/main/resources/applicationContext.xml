@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:util="http://www.springframework.org/schema/util" xmlns:context="http://www.springframework.org/schema/context"
-    xmlns:jdbc="http://www.springframework.org/schema/jdbc" xmlns:jee="http://www.springframework.org/schema/jee"
-    xmlns:tx="http://www.springframework.org/schema/tx"
-    xmlns:task="http://www.springframework.org/schema/task"
-    xmlns:mvc="http://www.springframework.org/schema/mvc"
-    xsi:schemaLocation="
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:jdbc="http://www.springframework.org/schema/jdbc" xmlns:jee="http://www.springframework.org/schema/jee"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:task="http://www.springframework.org/schema/task"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="
         http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
         http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-4.0.xsd
@@ -16,44 +17,44 @@
         http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd">
 
     <description>Spring公共配置</description>
- 	<context:component-scan base-package="pinguo.rocket.*"/>
+    <context:component-scan base-package="pinguo.rocket.*"/>
     <!-- 开启定时任务 -->
     <task:annotation-driven/>
-    
+
     <!-- applicationUtil工具类 -->
-	<bean id="ApplicationContextUtil" class="pinguo.rocket.mq.comm.ApplicationContextUtil"></bean>
-	
-	<!-- bean初始化配置 -->
-	<bean class="pinguo.rocket.mq.init.Rocketmq" scope="singleton">
-	</bean>
-	
+    <bean id="ApplicationContextUtil" class="pinguo.rocket.mq.comm.ApplicationContextUtil"></bean>
+
+    <!-- bean初始化配置 -->
+    <bean class="pinguo.rocket.mq.init.Rocketmq" scope="singleton">
+    </bean>
+
     <!-- 初始化消费者producer -->
-	<bean id="PinGuoProducer" class="com.alibaba.rocketmq.client.producer.DefaultMQProducer" scope="singleton">
-		<property name="producerGroup" value="${rmq.producerGroupName}"></property>
-		<property name="namesrvAddr" value="${rmq.namesrvAddr}"></property>
-	</bean>
-	
-	<!-- development环境 -->
+    <bean id="PinGuoProducer" class="com.alibaba.rocketmq.client.producer.DefaultMQProducer" scope="singleton">
+        <property name="producerGroup" value="${rmq.producerGroupName}"></property>
+        <property name="namesrvAddr" value="${rmq.namesrvAddr}"></property>
+    </bean>
+
+    <!-- development环境 -->
     <beans profile="development">
-        <context:property-placeholder ignore-unresolvable="true" file-encoding="utf-8" 
-        location="classpath:/config/development/rmq.properties" />
+        <context:property-placeholder ignore-unresolvable="true" file-encoding="utf-8"
+            location="classpath:/config/development/rmq.properties"/>
     </beans>
-    
-	<!-- production环境 -->
+
+    <!-- production环境 -->
     <beans profile="production">
-        <context:property-placeholder ignore-unresolvable="true" file-encoding="utf-8" 
-        location="classpath:/config/production/rmq.properties" />
+        <context:property-placeholder ignore-unresolvable="true" file-encoding="utf-8"
+            location="classpath:/config/production/rmq.properties"/>
     </beans>
-    
-	<!-- testing环境 -->
+
+    <!-- testing环境 -->
     <beans profile="testing">
-        <context:property-placeholder ignore-unresolvable="true" file-encoding="utf-8" 
-        location="classpath:/config/testing/rmq.properties" />
+        <context:property-placeholder ignore-unresolvable="true" file-encoding="utf-8"
+            location="classpath:/config/testing/rmq.properties"/>
     </beans>
-    
-	<!-- testing-dev环境 -->
+
+    <!-- testing-dev环境 -->
     <beans profile="production">
-        <context:property-placeholder ignore-unresolvable="true" file-encoding="utf-8" 
-        location="classpath:/config/testing-dev/rmq.properties" />
+        <context:property-placeholder ignore-unresolvable="true" file-encoding="utf-8"
+            location="classpath:/config/testing-dev/rmq.properties"/>
     </beans>
 </beans>

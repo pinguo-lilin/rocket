@@ -20,55 +20,53 @@ import pinguo.rocket.mq.entity.Strategy;
 import pinguo.rocket.mq.entity.Subscribe;
 
 /**
- * 
- *PushConsumer逻辑
- *
+ * PushConsumer逻辑
  */
 public class PushConsumer extends AbstractConsumer {
 
-	private final static Logger logger = LoggerFactory.getLogger(PushConsumer.class);
-	
-	public PushConsumer(String consumerName) {
-		super();
-		this.consumerName = consumerName;
-	}
+    private final static Logger logger = LoggerFactory.getLogger(PushConsumer.class);
 
-	@Override
-	public void start() throws MQClientException {
-		Consumer consumerModel = consumers.get(consumerName);
-		List<Subscribe> subscribeList = subscribes.get(consumerName);
+    public PushConsumer(String consumerName) {
+        super();
+        this.consumerName = consumerName;
+    }
 
-		// 初始化
-		DefaultMQPushConsumer consumer = new DefaultMQPushConsumer(consumerName);
-		consumer = (DefaultMQPushConsumer) ReflectionUtils.objectPropertiesToOtherOne(consumerModel, consumer);
+    @Override
+    public void start() throws MQClientException {
+        Consumer consumerModel = consumers.get(consumerName);
+        List<Subscribe> subscribeList = subscribes.get(consumerName);
 
-		consumer.setConsumeFromWhere(ConsumeFromWhere.CONSUME_FROM_FIRST_OFFSET);
-		consumer.setNamesrvAddr(namesrvAddr);
+        // 初始化
+        DefaultMQPushConsumer consumer = new DefaultMQPushConsumer(consumerName);
+        consumer = (DefaultMQPushConsumer) ReflectionUtils.objectPropertiesToOtherOne(consumerModel, consumer);
 
-		System.out.println("persit=" + consumer.getPersistConsumerOffsetInterval());
-		System.out.println("pullBatchSize=" + consumer.getPullBatchSize());
-		System.out.println("namesrvAddr=" + consumer.getNamesrvAddr());
+        consumer.setConsumeFromWhere(ConsumeFromWhere.CONSUME_FROM_FIRST_OFFSET);
+        consumer.setNamesrvAddr(namesrvAddr);
 
-		logger.info("consumer=" + consumerName + "启动参数 parmas=" + consumer.toString());
-		// 订阅专题
-		for (Subscribe subscribe : subscribeList) {
-			consumer.subscribe(subscribe.getTopic(), subscribe.getTags());
-		}
+        System.out.println("persit=" + consumer.getPersistConsumerOffsetInterval());
+        System.out.println("pullBatchSize=" + consumer.getPullBatchSize());
+        System.out.println("namesrvAddr=" + consumer.getNamesrvAddr());
 
-		// 转发策略初始化
-		Map<String, Map<String, Strategy>> topicTagStrategys = this.strategys.get(consumerName);
+        logger.info("consumer=" + consumerName + "启动参数 parmas=" + consumer.toString());
+        // 订阅专题
+        for (Subscribe subscribe : subscribeList) {
+            consumer.subscribe(subscribe.getTopic(), subscribe.getTags());
+        }
 
-		// 顺序消息
-		if (consumerModel.getOrder()) {
-			MessageListenerOrderly messageListener = new PushOrderMessageListener(topicTagStrategys);
-			consumer.registerMessageListener(messageListener);
-			logger.trace("consumer=" + consumerName + "顺序消费已启动...");
-			// 普通消息
-		} else {
-			MessageListenerConcurrently messageListener = new PushOrdinaryMessageListener(topicTagStrategys);
-			consumer.registerMessageListener(messageListener);
-			logger.trace("consumer=" + consumerName + "普通消费已启动...");
-		}
-		consumer.start();
-	}
+        // 转发策略初始化
+        Map<String, Map<String, Strategy>> topicTagStrategys = this.strategys.get(consumerName);
+
+        // 顺序消息
+        if (consumerModel.getOrder()) {
+            MessageListenerOrderly messageListener = new PushOrderMessageListener(topicTagStrategys);
+            consumer.registerMessageListener(messageListener);
+            logger.trace("consumer=" + consumerName + "顺序消费已启动...");
+            // 普通消息
+        } else {
+            MessageListenerConcurrently messageListener = new PushOrdinaryMessageListener(topicTagStrategys);
+            consumer.registerMessageListener(messageListener);
+            logger.trace("consumer=" + consumerName + "普通消费已启动...");
+        }
+        consumer.start();
+    }
 }

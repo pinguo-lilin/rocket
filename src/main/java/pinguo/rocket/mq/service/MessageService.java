@@ -18,41 +18,39 @@ import pinguo.rocket.mq.exception.ProducerException;
 import pinguo.rocket.mq.producer.selector.PinGuoMessageQueueSelector;
 
 /**
- * 
  * 发送消息逻辑
- *
  */
 @Service
 public class MessageService {
-	
-	private final static Logger logger = LoggerFactory.getLogger(MessageService.class);
-	
-	/**
-	 * 发送消息
-	 * 
-	 * @param  Msg msg
-	 * @return boolean
-	 * @throws InterruptedException 
-	 * @throws MQBrokerException 
-	 * @throws RemotingException 
-	 * @throws MQClientException 
-	 * @throws ProducerException 
-	 */
-	public boolean send(Msg msg) throws MQClientException, RemotingException, MQBrokerException, InterruptedException, ProducerException {
-		String topic = msg.getAppName();
-		String tag = msg.getOpcode();
-		String body = msg.getInfo();
-		String key = msg.getKey();
 
-		// 发送消息
-		DefaultMQProducer producer = (DefaultMQProducer) ApplicationContextUtil.getBean("PinGuoProducer");
-		Message message = new Message(topic, tag, key, body.getBytes());
+    private final static Logger logger = LoggerFactory.getLogger(MessageService.class);
 
-		SendResult sendResult = producer.send(message, new PinGuoMessageQueueSelector(), key);
-		if (sendResult.getSendStatus() == SendStatus.SEND_OK) {
-			logger.info("发送成功，SendStatus=" + sendResult.getSendStatus() + " message=" + message.toString() + " info=" + new String(message.getBody()));
-			return true;
-		}
-		throw new ProducerException("发送失败，sendStatus=" + sendResult.getSendStatus());
-	}
+    /**
+     * 发送消息
+     *
+     * @param Msg msg
+     * @return boolean
+     * @throws InterruptedException
+     * @throws MQBrokerException
+     * @throws RemotingException
+     * @throws MQClientException
+     * @throws ProducerException
+     */
+    public boolean send(Msg msg) throws MQClientException, RemotingException, MQBrokerException, InterruptedException, ProducerException {
+        String topic = msg.getAppName();
+        String tag = msg.getOpcode();
+        String body = msg.getInfo();
+        String key = msg.getKey();
+
+        // 发送消息
+        DefaultMQProducer producer = (DefaultMQProducer) ApplicationContextUtil.getBean("PinGuoProducer");
+        Message message = new Message(topic, tag, key, body.getBytes());
+
+        SendResult sendResult = producer.send(message, new PinGuoMessageQueueSelector(), key);
+        if (sendResult.getSendStatus() == SendStatus.SEND_OK) {
+            logger.info("发送成功，SendStatus=" + sendResult.getSendStatus() + " message=" + message.toString() + " info=" + new String(message.getBody()));
+            return true;
+        }
+        throw new ProducerException("发送失败，sendStatus=" + sendResult.getSendStatus());
+    }
 }
