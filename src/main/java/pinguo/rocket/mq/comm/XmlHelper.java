@@ -1,6 +1,7 @@
 package pinguo.rocket.mq.comm;
 
 import java.io.File;
+import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -49,7 +50,9 @@ public class XmlHelper {
      */
     public void parseXml() {
         try {
-            Document document = this.saxReader.read(new File(this.xmlPath));
+        	// 解决jar路径问题
+        	InputStream inputStream=this.getClass().getResourceAsStream("/"+this.xmlPath);
+            Document document = this.saxReader.read(inputStream);
             Element root = document.getRootElement();
             this.parseConsumers(root);
         } catch (DocumentException e) {

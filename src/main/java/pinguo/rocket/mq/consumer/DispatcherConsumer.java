@@ -24,7 +24,7 @@ public class DispatcherConsumer {
         }
         String contextEnv = "testing";// 运行环境每次打包切换
         String consumerName = args[0];// 第一个参数默认consumerName
-        String configPath = "src/main/resources/rocket.xml";// rmq配置文件
+        String configPath = "rocket.xml";// rmq配置文件
 
         //解析xml
         XmlHelper xmlHelper = new XmlHelper(configPath);
