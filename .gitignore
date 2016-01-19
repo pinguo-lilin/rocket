@@ -1,6 +1,8 @@
 /logs/*
 target/
 .settings
+.classpath
+.project
 /.idea/*
 /C:/*
 rocket.iml
