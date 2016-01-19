@@ -1,4 +1,6 @@
 /logs/*
+/target/*
+/target/classes/*
 /.idea/*
 /C:/*
 rocket.iml
