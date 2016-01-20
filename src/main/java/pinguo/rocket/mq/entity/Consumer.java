@@ -5,6 +5,7 @@ public class Consumer {
     private String name;
     private String type;
     private boolean order;
+    private int threads; // 消费者启动线程数
     private int persistConsumerOffsetInterval = 1000 * 5;
     private int heartbeatBrokerInterval = 1000 * 30;
     private int pollNameServerInteval = 1000 * 30;
@@ -97,8 +98,16 @@ public class Consumer {
         this.name = name;
     }
 
+    public void setThreads(int threads) {
+        this.threads = threads;
+    }
+
     public String getType() {
         return type;
+    }
+
+    public int getThreads() {
+        return threads;
     }
 
     public void setType(String type) {

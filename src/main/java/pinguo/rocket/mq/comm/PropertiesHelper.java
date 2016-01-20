@@ -1,7 +1,5 @@
 package pinguo.rocket.mq.comm;
 
-import java.io.BufferedInputStream;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -14,6 +12,7 @@ import java.util.ResourceBundle;
 public class PropertiesHelper {
     private ResourceBundle rb;
 
+<<<<<<< HEAD
     /**
      * 初始化
      *
@@ -30,6 +29,25 @@ public class PropertiesHelper {
             e.printStackTrace();
         }
     }
+=======
+	/**
+	 * 初始化
+	 * 
+	 * @param filePath
+	 */
+	public PropertiesHelper(String filePath) {
+		InputStream inStream;
+		try {
+			// 解决jar路径问题
+			inStream= this.getClass().getResourceAsStream("/config/production/rmq.properties");
+			this.rb = new PropertyResourceBundle(inStream);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+>>>>>>> ab42a3c470a9bb031b565c5a6ea12386a374c221
 
     /**
      * 返回string

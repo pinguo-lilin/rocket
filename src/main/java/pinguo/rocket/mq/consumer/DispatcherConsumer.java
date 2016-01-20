@@ -24,7 +24,7 @@ public class DispatcherConsumer {
         }
         String contextEnv = "testing";// 运行环境每次打包切换
         String consumerName = args[0];// 第一个参数默认consumerName
-        String configPath = "src/main/resources/rocket.xml";// rmq配置文件
+        String configPath = "rocket.xml";// rmq配置文件
 
         //解析xml
         XmlHelper xmlHelper = new XmlHelper(configPath);
@@ -47,9 +47,17 @@ public class DispatcherConsumer {
         pushConsumer.setSubscribes(subscribes);
         pushConsumer.setStrategys(strategys);
         try {
-            pushConsumer.start();
-            logger.trace("consumer=" + consumerName + "已经启动...");
-        } catch (MQClientException e) {
+            // 启动消费者多线程.
+            for (int i = 0; i < threads; i ++) {
+                ConsumerThread ct = new ConsumerThread(pushConsumer);
+
+                Thread thread = new Thread(ct);
+                thread.start();
+                String tcName = thread.getName();
+                threadListener.put(tcName, thread);
+                logger.trace("consumer=" + consumerName + ",threadName=" + tcName + "已经启动...");
+            }
+        } catch (Exception e) {
             logger.error("consumer=" + consumerName + "启动失败，error=" + e.getMessage());
         }
     }
