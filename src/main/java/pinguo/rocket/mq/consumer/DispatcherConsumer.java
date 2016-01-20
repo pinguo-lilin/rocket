@@ -9,7 +9,9 @@ import org.slf4j.LoggerFactory;
 
 import com.alibaba.rocketmq.client.exception.MQClientException;
 
+import pinguo.rocket.mq.comm.ConsumerThread;
 import pinguo.rocket.mq.comm.XmlHelper;
+import pinguo.rocket.mq.consumer.listener.ThreadListener;
 import pinguo.rocket.mq.entity.Consumer;
 import pinguo.rocket.mq.entity.Strategy;
 import pinguo.rocket.mq.entity.Subscribe;
@@ -38,7 +40,8 @@ public class DispatcherConsumer {
             logger.error("consumer没有配置，请确认配置文件rocket.xml");
             return;
         }
-
+        Consumer consumer = consumers.get(consumerName);
+        int threads = consumer.getThreads();
         //消费
         AbstractConsumer pushConsumer = new PushConsumer(consumerName);
 
@@ -46,6 +49,8 @@ public class DispatcherConsumer {
         pushConsumer.setConsumers(consumers);
         pushConsumer.setSubscribes(subscribes);
         pushConsumer.setStrategys(strategys);
+
+        ThreadListener threadListener = new ThreadListener();
         try {
             // 启动消费者多线程.
             for (int i = 0; i < threads; i ++) {
