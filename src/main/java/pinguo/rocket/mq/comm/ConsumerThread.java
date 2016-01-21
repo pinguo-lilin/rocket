@@ -7,8 +7,6 @@ import pinguo.rocket.mq.consumer.AbstractConsumer;
 import pinguo.rocket.mq.consumer.listener.ThreadListener;
 import pinguo.rocket.mq.init.Rocketmq;
 
-import java.util.Observable;
-
 /**
  * ConsumerThread
  */

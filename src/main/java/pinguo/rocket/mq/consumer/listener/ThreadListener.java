@@ -2,8 +2,6 @@ package pinguo.rocket.mq.consumer.listener;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Observable;
-import java.util.Observer;
 
 /**
  * 消费者线程监听控制器
