@@ -74,7 +74,7 @@ public class DispatcherConsumer {
             }
 
             // 启动监控器
-            ConsumerMonitor cMonitor = new ConsumerMonitor(threadListener, pushConsumer, consumerName);
+            ConsumerMonitor cMonitor = new ConsumerMonitor(consumerName, threadListener, pushConsumer);
             Thread tMonitor = new Thread(cMonitor);
             tMonitor.start();
             logger.trace("monitor 已经启动...");

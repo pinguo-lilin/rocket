@@ -1,7 +1,6 @@
 package pinguo.rocket.mq.comm;
 
 import pinguo.rocket.mq.consumer.AbstractConsumer;
-import pinguo.rocket.mq.consumer.PushConsumer;
 import pinguo.rocket.mq.consumer.listener.ThreadListener;
 
 import java.util.Iterator;
@@ -18,7 +17,7 @@ public class ConsumerMonitor implements Runnable {
     private AbstractConsumer pushConsumer;
     private String consumerName;
 
-    public ConsumerMonitor(ThreadListener threadListener, AbstractConsumer pushConsumer, String consumerName) {
+    public ConsumerMonitor(String consumerName, ThreadListener threadListener, AbstractConsumer pushConsumer) {
         this.threadListener = threadListener;
         this.pushConsumer = pushConsumer;
         this.consumerName = consumerName;
@@ -49,7 +48,7 @@ public class ConsumerMonitor implements Runnable {
                 // 终止线程
                 this.threadListener.get(key).interrupt();
                 this.threadListener.remove(key);
-                // 重新启动线程
+                // 启动一个新线程
                 ConsumerThread ct = new ConsumerThread(this.pushConsumer);
                 ct.create(threadListener, this.consumerName);
             }
