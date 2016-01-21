@@ -1,5 +1,9 @@
 package pinguo.rocket.mq.comm;
 
+import pinguo.rocket.mq.consumer.AbstractConsumer;
+import pinguo.rocket.mq.consumer.PushConsumer;
+import pinguo.rocket.mq.consumer.listener.ThreadListener;
+
 import java.util.Iterator;
 import java.util.Map;
 
@@ -10,10 +14,14 @@ import java.util.concurrent.TimeUnit;
  */
 public class ConsumerMonitor implements Runnable {
 
-    private Map<String, Thread> monitoredThreads;
+    private ThreadListener threadListener;
+    private AbstractConsumer pushConsumer;
+    private String consumerName;
 
-    public ConsumerMonitor(Map<String, Thread> monitoredThreads) {
-        this.monitoredThreads = monitoredThreads;
+    public ConsumerMonitor(ThreadListener threadListener, AbstractConsumer pushConsumer, String consumerName) {
+        this.threadListener = threadListener;
+        this.pushConsumer = pushConsumer;
+        this.consumerName = consumerName;
     }
 
     @Override
@@ -32,17 +40,18 @@ public class ConsumerMonitor implements Runnable {
      * 监控逻辑
      */
     private void monitor() {
-        Iterator iter = monitoredThreads.entrySet().iterator();
+        Iterator iter = this.threadListener.getAll().entrySet().iterator();
         while (iter.hasNext()) {
             Map.Entry entry = (Map.Entry) iter.next();
-            Object key = entry.getKey();
-            Thread.State state = monitoredThreads.get(key).getState();
+            String key = (String) entry.getKey();
+            Thread.State state = this.threadListener.get(key).getState();
             if (state.TERMINATED.equals(state)) {
                 // 终止线程
-                monitoredThreads.get(key).interrupt();
+                this.threadListener.get(key).interrupt();
+                this.threadListener.remove(key);
                 // 重新启动线程
-                monitoredThreads.get(key).start();
-
+                ConsumerThread ct = new ConsumerThread(this.pushConsumer);
+                ct.create(threadListener, this.consumerName);
             }
         }
     }

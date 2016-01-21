@@ -2,11 +2,13 @@ package pinguo.rocket.mq.consumer.listener;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Observable;
+import java.util.Observer;
 
 /**
  * 消费者线程监听控制器
  */
-public class ThreadListener {
+public class ThreadListener implements Observer{
     private Map<String, Thread> threads = new HashMap<String, Thread>();
 
     public boolean put(String threadName, Thread thread) {
@@ -32,5 +34,10 @@ public class ThreadListener {
 
     public Map getAll() {
         return this.threads;
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
+
     }
 }
