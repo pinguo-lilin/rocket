@@ -69,14 +69,19 @@ public class DispatcherConsumer {
                     ConsumerThread ct = new ConsumerThread(pushConsumer);
                     ct.create(threadListener, consumerName);
                 }
-            } catch (Exception e) {
+            } catch (IllegalStateException e) {
                 logger.error("consumer=" + consumerName + "启动失败，error=" + e.getMessage());
             }
 
             // 启动监控器
             ConsumerMonitor cMonitor = new ConsumerMonitor(consumerName, threadListener, pushConsumer);
-            Thread tMonitor = new Thread(cMonitor);
-            tMonitor.start();
+            try {
+                Thread tMonitor = new Thread(cMonitor);
+                tMonitor.start();
+            } catch (IllegalStateException e) {
+                logger.trace("monitor 启动失败...");
+                return;
+            }
             logger.trace("monitor 已经启动...");
         }
     }

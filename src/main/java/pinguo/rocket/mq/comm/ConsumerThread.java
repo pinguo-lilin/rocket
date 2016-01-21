@@ -25,11 +25,11 @@ public class ConsumerThread implements Runnable {
         try {
             pushConsumer.start();
         } catch (MQClientException e) {
-
+            logger.error("Occur client error with err message=" + e.getErrorMessage());
         }
     }
 
-    public void create(ThreadListener threadListener, String consumerName) {
+    public void create(ThreadListener threadListener, String consumerName) throws IllegalStateException {
         Thread thread = new Thread(this);
         thread.start();
         String tcName = thread.getName();
