@@ -1,6 +1,5 @@
 package pinguo.rocket.mq.comm;
 
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -11,9 +10,9 @@ import java.util.concurrent.TimeUnit;
  */
 public class ConsumerMonitor implements Runnable {
 
-    private HashMap<String, Thread> monitoredThreads;
+    private Map<String, Thread> monitoredThreads;
 
-    public ConsumerMonitor(HashMap<String, Thread> monitoredThreads) {
+    public ConsumerMonitor(Map<String, Thread> monitoredThreads) {
         this.monitoredThreads = monitoredThreads;
     }
 

@@ -29,4 +29,8 @@ public class ThreadListener {
 
         return null;
     }
+
+    public Map getAll() {
+        return this.threads;
+    }
 }
