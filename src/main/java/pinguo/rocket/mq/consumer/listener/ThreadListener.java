@@ -8,7 +8,7 @@ import java.util.Observer;
 /**
  * 消费者线程监听控制器
  */
-public class ThreadListener implements Observer{
+public class ThreadListener{
     private Map<String, Thread> threads = new HashMap<String, Thread>();
 
     public boolean put(String threadName, Thread thread) {
@@ -34,10 +34,5 @@ public class ThreadListener implements Observer{
 
     public Map getAll() {
         return this.threads;
-    }
-
-    @Override
-    public void update(Observable o, Object arg) {
-
     }
 }

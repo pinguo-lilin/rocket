@@ -12,7 +12,7 @@ import java.util.Observable;
 /**
  * ConsumerThread
  */
-public class ConsumerThread extends Observable implements Runnable {
+public class ConsumerThread implements Runnable {
 
     private final static Logger logger = LoggerFactory.getLogger(Rocketmq.class);
 
