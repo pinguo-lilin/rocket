@@ -6,15 +6,13 @@ import org.slf4j.LoggerFactory;
 import pinguo.rocket.mq.consumer.monitor.ConsumerMonitor;
 import pinguo.rocket.mq.init.Rocketmq;
 
-import java.util.Map;
-
 /**
  * ConsumerThread
  */
 public class ConsumerThread implements Runnable {
 
     private final static Logger logger = LoggerFactory.getLogger(Rocketmq.class);
-
+    private boolean started = true;
     private AbstractConsumer pushConsumer;
 
     public ConsumerThread(AbstractConsumer pushConsumer) {
@@ -26,7 +24,8 @@ public class ConsumerThread implements Runnable {
         try {
             pushConsumer.start();
         } catch (MQClientException e) {
-            logger.error("Occur client error with message=" + e.getMessage());
+            this.started = false;
+            logger.error("Start thread occur MQClient error with message=" + e.getMessage());
         }
     }
 
@@ -34,9 +33,14 @@ public class ConsumerThread implements Runnable {
         Thread thread = new Thread(this);
         thread.start();
         String tcName = thread.getName();
-        consumerMonitor.putThread(tcName, thread);
-
-        logger.trace("consumer=" + consumerName + ",threadName=" + tcName + "已经启动...");
+        System.out.println(this.started);
+        if (this.started) {
+            consumerMonitor.putThread(tcName, thread);
+            logger.trace("consumer=" + consumerName + ",threadName=" + tcName + "已经启动...");
+        } else {
+            logger.trace("consumer=" + consumerName + ",threadName=" + tcName + "启动失败...");
+            thread.interrupt();
+        }
     }
 }
 

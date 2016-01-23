@@ -34,7 +34,7 @@ public class DispatcherConsumer {
 
         //条件过滤
         if (!consumers.containsKey(consumerName) || !subscribes.containsKey(consumerName)) {
-            logger.error("consumer没有配置，请确认配置文件rocket.xml");
+            logger.error("Consumer没有配置，请确认配置文件rocket.xml");
             return;
         }
         Consumer consumer = consumers.get(consumerName);
@@ -56,8 +56,8 @@ public class DispatcherConsumer {
                 ct.create(consumerMonitor, consumerName);
             }
         } catch (IllegalStateException e) {
-            logger.error("consumer=" + consumerName + "启动失败，error=" + e.getMessage());
-            Runtime.getRuntime().exit(0);
+            logger.error("Consumer=" + consumerName + "启动失败，error=" + e.getMessage());
+            // Runtime.getRuntime().exit(0);
         }
 
         // 启动监控器
@@ -65,10 +65,10 @@ public class DispatcherConsumer {
             Thread tMonitor = new Thread(consumerMonitor);
             tMonitor.start();
         } catch (IllegalStateException e) {
-            logger.trace("monitor 启动失败, error=" + e.getMessage());
+            logger.trace("Monitor 启动失败, error=" + e.getMessage());
             Runtime.getRuntime().exit(0);
         }
 
-        logger.trace("monitor 已经启动...");
+        logger.trace("Monitor 已经启动...");
     }
 }
