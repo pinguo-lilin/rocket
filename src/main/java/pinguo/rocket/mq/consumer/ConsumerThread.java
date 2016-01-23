@@ -1,11 +1,12 @@
-package pinguo.rocket.mq.comm;
+package pinguo.rocket.mq.consumer;
 
 import com.alibaba.rocketmq.client.exception.MQClientException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import pinguo.rocket.mq.consumer.AbstractConsumer;
-import pinguo.rocket.mq.consumer.listener.ThreadListener;
+import pinguo.rocket.mq.consumer.monitor.ConsumerMonitor;
 import pinguo.rocket.mq.init.Rocketmq;
+
+import java.util.Map;
 
 /**
  * ConsumerThread
@@ -25,15 +26,15 @@ public class ConsumerThread implements Runnable {
         try {
             pushConsumer.start();
         } catch (MQClientException e) {
-            logger.error("Occur client error with err message=" + e.getErrorMessage());
+            logger.error("Occur client error with message=" + e.getMessage());
         }
     }
 
-    public void create(ThreadListener threadListener, String consumerName) throws IllegalStateException {
+    public void create(ConsumerMonitor consumerMonitor, String consumerName) throws IllegalStateException {
         Thread thread = new Thread(this);
         thread.start();
         String tcName = thread.getName();
-        threadListener.put(tcName, thread);
+        consumerMonitor.putThread(tcName, thread);
 
         logger.trace("consumer=" + consumerName + ",threadName=" + tcName + "已经启动...");
     }
