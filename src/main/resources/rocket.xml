@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rocket>
-    <consumer name="cc" persistConsumerOffsetInterval="5009" pullBatchSize="128" threads="5">
+    <consumer name="cc" persistConsumerOffsetInterval="5009" pullBatchSize="128">
         <topic name="album">
             <tag name="comment.addLike">
                 <url>http://www.stelin.com/rmq.php</url>
@@ -26,7 +26,7 @@
             </tag>
         </topic>
     </consumer>
-    <consumer name="member" persistConsumerOffsetInterval="5009" pullBatchSize="128" threads="5">
+    <consumer name="member" persistConsumerOffsetInterval="5009" pullBatchSize="128">
         <topic name="cm">
             <tag name="task.submit">
                 <url>/cm/inner/mq/MqTask</url>

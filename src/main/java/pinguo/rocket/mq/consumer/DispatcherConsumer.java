@@ -3,11 +3,11 @@ package pinguo.rocket.mq.consumer;
 import java.util.List;
 import java.util.Map;
 
+import com.alibaba.rocketmq.client.exception.MQClientException;
 import org.dom4j.DocumentException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import pinguo.rocket.mq.consumer.monitor.ConsumerMonitor;
 import pinguo.rocket.mq.comm.XmlHelper;
 import pinguo.rocket.mq.entity.Consumer;
 import pinguo.rocket.mq.entity.Strategy;
@@ -37,8 +37,6 @@ public class DispatcherConsumer {
             logger.error("Consumer没有配置，请确认配置文件rocket.xml");
             return;
         }
-        Consumer consumer = consumers.get(consumerName);
-        int threads = consumer.getThreads();
         // 消费
         AbstractConsumer pushConsumer = new PushConsumer(consumerName);
 
@@ -47,28 +45,10 @@ public class DispatcherConsumer {
         pushConsumer.setSubscribes(subscribes);
         pushConsumer.setStrategys(strategys);
 
-        // 一个消费者对应一个监听器
-        ConsumerMonitor consumerMonitor = new ConsumerMonitor(consumerName, pushConsumer);
         try {
-            // 启动消费者多线程.
-            for (int i = 0; i < threads; i++) {
-                ConsumerThread ct = new ConsumerThread(pushConsumer);
-                ct.create(consumerMonitor, consumerName);
-            }
-        } catch (IllegalStateException e) {
-            logger.error("Consumer=" + consumerName + "启动失败，error=" + e.getMessage());
-            // Runtime.getRuntime().exit(0);
+            pushConsumer.start();
+        } catch (MQClientException e) {
+            logger.error("Start MQClient failed with message=" + e.getMessage());
         }
-
-        // 启动监控器
-        try {
-            Thread tMonitor = new Thread(consumerMonitor);
-            tMonitor.start();
-        } catch (IllegalStateException e) {
-            logger.trace("Monitor 启动失败, error=" + e.getMessage());
-            Runtime.getRuntime().exit(0);
-        }
-
-        logger.trace("Monitor 已经启动...");
     }
 }
