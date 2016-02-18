@@ -2,7 +2,7 @@
 <configuration>
 
     <!-- 日志打印路径 -->
-    <property name="logDir" value="C:\logs"/>
+    <property name="logDir" value="${user.home}/data/www/runtime/rocketmq"/>
 
     <!-- console控制台输出 -->
     <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
@@ -19,7 +19,7 @@
             <onMismatch>DENY</onMismatch>
         </filter>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <FileNamePattern>C:\Users\admin\www\logs\application.log.%d{yyyyMMdd}</FileNamePattern>
+            <FileNamePattern>${logDir}/application.log.%d{yyyyMMdd}</FileNamePattern>
             <MaxHistory>30</MaxHistory>
         </rollingPolicy>
         <encoder>
@@ -34,7 +34,7 @@
             <onMismatch>DENY</onMismatch>
         </filter>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <FileNamePattern>C:\Users\admin\www\logs\application.log.%d{yyyyMMdd}</FileNamePattern>
+            <FileNamePattern>${logDir}/application.log.%d{yyyyMMdd}</FileNamePattern>
             <MaxHistory>30</MaxHistory>
         </rollingPolicy>
         <encoder>
@@ -50,7 +50,7 @@
             <onMismatch>DENY</onMismatch>
         </filter>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <FileNamePattern>C:\Users\admin\www\logs\notice.log.%d{yyyyMMdd}</FileNamePattern>
+            <FileNamePattern>${logDir}/notice.log.%d{yyyyMMdd}</FileNamePattern>
             <MaxHistory>30</MaxHistory>
         </rollingPolicy>
         <encoder>
