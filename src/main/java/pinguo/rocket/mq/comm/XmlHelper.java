@@ -50,8 +50,8 @@ public class XmlHelper {
      */
     public void parseXml() {
         try {
-        	// 解决jar路径问题
-        	InputStream inputStream=this.getClass().getResourceAsStream("/"+this.xmlPath);
+            // 解决jar路径问题
+            InputStream inputStream = this.getClass().getResourceAsStream("/" + this.xmlPath);
             Document document = this.saxReader.read(inputStream);
             Element root = document.getRootElement();
             this.parseConsumers(root);

@@ -6,3 +6,4 @@ target/
 /.idea/*
 /C:/*
 rocket.iml
+/target/*
